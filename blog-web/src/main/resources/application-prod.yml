@@ -14,4 +14,4 @@ swagger:
   enable: true
 logging:
   file:
-    path: /usr/app/blog/log/
+    path: /usr/app/blog/logs/
