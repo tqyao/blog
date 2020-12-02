@@ -1,0 +1,78 @@
+server:
+  port: 8082
+spring:
+  profiles:
+    active: prod
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: GMT +8
+  application:
+    name: financial-service
+  ##数据库连接信息
+  datasource:
+    url: jdbc:mysql://${mysql.url}:${mysql.port}/${mysql.database}?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&useAffectedRows=true&serverTimezone=CTT
+    username: ${mysql.user}
+    password: ${mysql.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # springboot 默认连接池Hikari
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 900000
+      connection-timeout: 15000
+      connection-test-query: SELECT 1
+  redis:
+    host: ${redis.host}
+    port: ${redis.port}
+    password: ${redis.password}
+    database: ${redis.database}
+mybatis-plus:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath*:cn/**/dao/*.xml
+#  type-aliases-package: cn.tqinyao.blog.entity.*
+#  type-enums-package: cn.tqinyao.blog.enums
+  global-config:
+  # 数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID",ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: uuid
+#    refresh: true
+  # 二级缓存
+  configuration:
+    cache-enabled: true
+#logging:
+#    config: classpath:logback-boot.xml
+
+
+## 自定义redis key
+redis:
+  web-database: blog
+  key:
+    auth-code: 'b:authCode'
+    member: 'b:member'
+  expire:
+    auth-code: 90  # 验证码超期时间
+    common: 86400 # 24小时
+  blacklist: 'b:blacklist'
+## 自定义 jwt key
+jwt:
+  token-header: Authorization #JWT存储的请求头
+  refresh-token-header: Refresh_Token #JWT 刷新token请求头
+  secret: blog-web-secret #JWT加解密使用的密钥
+  access-token-expiration: 7200 #JWT(ac)超时时间(60*60*2)
+  refresh-token-expiration: 604800 #JWT(rft)的超期限时间(60*60*24*7)
+  token-head: 'Bearer '  #JWT负载中拿到开头
+
+# ===== 自定义swagger配置 ===== #
+swagger:
+  enable: true
+  application-name: ${spring.application.name}
+  application-version: 1.0
+  application-description: springfox swagger 3.0 blog
+  try-host: http://localhost:${server.port}
+

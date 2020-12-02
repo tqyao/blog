@@ -1,0 +1,21 @@
+mysql:
+  database: my-blog
+  user: root
+  password: 790461387
+  url: localhost
+  port: 3306
+#redis配置
+redis:
+  host:
+  port:
+  password:
+  database:
+swagger:
+  enable: true
+log:
+  path: /data/y-blog-log/
+jwt:
+  secret: PrivateSecret
+  issuer: y-blog
+  expire-time-in-second: 1209600L
+

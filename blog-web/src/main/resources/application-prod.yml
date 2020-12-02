@@ -1,0 +1,17 @@
+mysql:
+  database: blog
+  user: blog
+  password: 790461387
+  url: 47.112.114.47
+  port: 3306
+##redis配置
+redis:
+  host: localhost
+  port: 6379
+  password: 790461387
+  database: 0
+swagger:
+  enable: true
+logging:
+  file:
+    path: /usr/app/blog/log/

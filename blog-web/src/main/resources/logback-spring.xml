@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="false" scanPeriod="30 seconds">
+
+    <springProperty scope="context" name="LOG_HOME" source="logging.file.path"/>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}" />
+
+
+    <!--应用名称-->
+    <property name="APP_NAME" value="blog"/>
+
+    <!-- 控制台日志输出-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <!--根据日志级别分离日志，分别输出到不同的文件-->
+    <!-- 输入INFO日志到指定文件-->
+    <appender name="FILE-INFO-OUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%level] [%thread] [%class:%line] - %m %n</pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--按时间保存日志 修改格式可以按小时、按天、月来保存-->
+            <fileNamePattern>${LOG_HOME}/${APP_NAME}.info-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!--保存时长-->
+            <maxHistory>30</maxHistory>
+            <!--文件大小-->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 输入错误日志到指定文件-->
+    <appender name="FILE-ERROR-OUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%level] [%thread] [%class:%line] - %m %n</pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <!-- ${logPath}/blog-log.%d{yyyy-MM-dd}.log-->
+            <fileNamePattern>${LOG_HOME}/${APP_NAME}.error-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 30 days -->
+            <maxHistory>30</maxHistory>
+            <!--文件大小-->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!--指定logger的设置，additivity指示是否遵循缺省的继承机制 -->
+    <logger name="cn.tqyao.blog" additivity="true"/>
+
+
+    <!-- 根logger的设置-->
+    <root>
+        <level value ="info"/>
+        <!-- 控制台日志继承root输出级别-->
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE-ERROR-OUT"/>
+        <appender-ref ref="FILE-INFO-OUT"/>
+    </root>
+
+</configuration>
