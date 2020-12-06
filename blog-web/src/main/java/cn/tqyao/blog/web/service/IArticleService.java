@@ -1,7 +1,9 @@
 package cn.tqyao.blog.web.service;
 
 import cn.tqyao.blog.entity.Article;
+import cn.tqyao.blog.web.dto.ArticleDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <p>
@@ -13,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IArticleService extends IService<Article> {
 
+
+    Boolean addArticle(ArticleDTO dto);
 }

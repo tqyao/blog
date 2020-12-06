@@ -2,6 +2,7 @@ package cn.tqyao.blog.dao;
 
 import cn.tqyao.blog.entity.ArticleCommonData;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author -Tanqy
  * @since 2020-12-02
  */
+@Repository
 public interface ArticleCommonDataDao extends BaseMapper<ArticleCommonData> {
 
 }

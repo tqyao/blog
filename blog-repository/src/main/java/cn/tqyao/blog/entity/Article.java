@@ -29,9 +29,6 @@ public class Article extends BaseEntity {
     @ApiModelProperty(value = "作者ID")
     private String authorId;
 
-    @ApiModelProperty(value = "分类ID")
-    private String categoryId;
-
     @ApiModelProperty(value = "文章标题")
     private String title;
 
@@ -39,13 +36,13 @@ public class Article extends BaseEntity {
     private String summary;
 
     @ApiModelProperty(value = "观看数")
-    private Integer veiwCount;
+    private Integer viewCount;
 
     @ApiModelProperty(value = "点赞数")
     private Integer likeCount;
 
     @ApiModelProperty(value = "评论数")
-    private Integer commemtCount;
+    private Integer commentCount;
 
     @ApiModelProperty(value = "收藏数")
     private Integer collectCount;

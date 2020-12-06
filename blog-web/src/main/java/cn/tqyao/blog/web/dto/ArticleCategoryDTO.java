@@ -1,17 +1,17 @@
 package cn.tqyao.blog.web.dto;
 
+import cn.tqyao.blog.base.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
  * <p>
- * 文章标签
+ * 文章分类
  * </p>
  *
  * @author -Tanqy
@@ -20,16 +20,16 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="ArticleTagDTO", description="文章-标签-DTO")
-public class ArticleTagDTO implements Serializable {
+@ApiModel(value="ArticleCategoryDTO", description="文章分类-DTO")
+public class ArticleCategoryDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotBlank(message = "name 不能为空")
     @ApiModelProperty(value = "分类名称")
     private String name;
 
     @ApiModelProperty(value = "分类图片")
     private String avatar;
+
 
 }
