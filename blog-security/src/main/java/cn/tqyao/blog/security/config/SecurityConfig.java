@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //静态资源 start
 
         web.ignoring().antMatchers("/member/register");
+        web.ignoring().antMatchers("/article/tag/**");
 //        web.ignoring().antMatchers("/member/logout/**");
     }
 

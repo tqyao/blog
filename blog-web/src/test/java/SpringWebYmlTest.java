@@ -4,10 +4,12 @@
 
 
 import cn.tqyao.blog.common.redis.RedisService;
+import cn.tqyao.blog.entity.Member;
 import cn.tqyao.blog.web.BlogWebApplication;
 import cn.tqyao.blog.web.config.RedisProperties;
 import cn.tqyao.blog.web.service.IMemberCacheService;
 import cn.tqyao.blog.web.service.IMemberService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.Wrapper;
 import java.util.List;
 
 /**
@@ -69,6 +72,17 @@ public class SpringWebYmlTest {
 //        System.out.println("tokenBody2==" + tokenBody2);
 //        System.out.println();
 //        System.out.println("tokenBody === tokenBody2 ===>" + tokenBody.equals(tokenBody2));
+    }
+
+    @Test
+    public void testSecondLevelCache(){
+        Member one = memberService.getOne(Wrappers.<Member>lambdaQuery().eq(Member::getId,"ae50fd5d13c8544805e7d2f28423d099"));
+        System.out.println(one);
+        System.out.println("-------------------------");
+        Member two = memberService.getOne(Wrappers.<Member>lambdaQuery().eq(Member::getId,"ae50fd5d13c8544805e7d2f28423d099"));
+        System.out.println(two);
+        System.out.println();
+        System.out.println(two == one);
     }
 
 

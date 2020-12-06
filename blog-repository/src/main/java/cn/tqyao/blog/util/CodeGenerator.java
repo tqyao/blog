@@ -59,6 +59,7 @@ public class CodeGenerator {
         autoGenerator.setTemplateEngine(new FreemarkerTemplateEngine());
         autoGenerator.execute();
 
+        //import cn.tqyao.blog.web.null.Article;
         AutoGenerator autoGenerator2 = new AutoGenerator();
         CodeGenerator generator2 = new CodeGenerator();
         generator2.setDataSource(autoGenerator2);

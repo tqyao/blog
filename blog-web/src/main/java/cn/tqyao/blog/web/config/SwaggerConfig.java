@@ -66,23 +66,23 @@ public class SwaggerConfig  {
                 .securitySchemes(securitySchemes())
 
                 // 授权信息全局应用
-                .securityContexts(securityContexts())
-                // 全局请求参数头
-                .globalRequestParameters(globalRequestParameters());
+                .securityContexts(securityContexts());
+//                // 全局请求参数头
+//                .globalRequestParameters(globalRequestParameters());
     }
 
-    /**
-     * 全局参数请求头
-     * @return
-     */
-    private List<RequestParameter> globalRequestParameters() {
-        RequestParameterBuilder parameterBuilder = new RequestParameterBuilder()
-                .in(ParameterType.HEADER)
-                .name("Authorization")
-                .required(false)
-                .query(param -> param.model(model -> model.scalarModel(ScalarType.STRING)));
-        return Collections.singletonList(parameterBuilder.build());
-    }
+//    /**
+//     * 全局参数请求头
+//     * @return
+//     */
+//    private List<RequestParameter> globalRequestParameters() {
+//        RequestParameterBuilder parameterBuilder = new RequestParameterBuilder()
+//                .in(ParameterType.HEADER)
+//                .name("Authorization")
+//                .required(false)
+//                .query(param -> param.model(model -> model.scalarModel(ScalarType.STRING)));
+//        return Collections.singletonList(parameterBuilder.build());
+//    }
 
 
     /**

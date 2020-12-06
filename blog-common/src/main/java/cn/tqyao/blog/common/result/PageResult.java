@@ -12,6 +12,8 @@ import lombok.Data;
 @Data
 public class PageResult<T> extends Result<T> {
 
+    private long current;
+    private long size;
     private long total;
 
     public static <T> PageResult<T> success(T data, Long total) {

@@ -52,6 +52,8 @@ public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint {
             }
             ResponseUtil.send(response, Result.custom(tokenException.getResultCode()));
         } else {
+            log.warn("认证失败-> 未登录认证, uri: {} , caused by: {}",
+                    request.getRequestURI(), authException);
             ResponseUtil.send(response, Result.custom(ResultCode.UNAUTHORIZED));
         }
 

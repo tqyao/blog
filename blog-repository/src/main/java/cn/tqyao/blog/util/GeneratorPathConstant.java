@@ -22,11 +22,11 @@ public interface GeneratorPathConstant {
 
     String DB_NAME = "blog";
 
-    String USERNAME = "root";
+    String USERNAME = "blog";
 
     String PASSWORD = "790461387";
 
-    String DB_URL = "jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&useAffectedRows=true&serverTimezone=CTT";
+    String DB_URL = "jdbc:mysql://47.112.114.47:3306/blog?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&useAffectedRows=true&serverTimezone=CTT";
 
     //------------------模块-----------------------
 

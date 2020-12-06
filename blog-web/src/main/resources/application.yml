@@ -2,7 +2,7 @@ server:
   port: 8082
 spring:
   profiles:
-    active: prod
+    active: test
   jackson:
     date-format: yyyy-MM-dd
     time-zone: GMT +8
