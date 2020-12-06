@@ -4,12 +4,12 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.tqyao.blog.entity.ArticleTagRelation">
-    <result column="id" property="id" />
-    <result column="create_time" property="createTime" />
-    <result column="update_time" property="updateTime" />
-    <result column="deleted" property="deleted" />
-        <result column="article_id" property="articleId" />
-        <result column="tag_id" property="tagId" />
+        <result column="id" property="id" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+            <result column="article_id" property="articleId" />
+            <result column="category_id" property="categoryId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -18,7 +18,7 @@
         create_time,
         update_time,
         deleted,
-        article_id, tag_id
+        article_id, category_id
     </sql>
 
 </mapper>

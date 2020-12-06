@@ -1,7 +1,8 @@
 package cn.tqyao.blog.web.mapper;
 
-import cn.tqyao.blog.web.null.ArticleTagRelation;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import cn.tqyao.blog.dao.ArticleTagRelationDao;
+import org.springframework.stereotype.Repository;
+
 
 /**
  * <p>
@@ -11,6 +12,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author -Tanqy
  * @since 2020-12-06
  */
-public interface ArticleTagRelationMapper extends BaseMapper<ArticleTagRelation> {
+
+@Repository
+public interface ArticleTagRelationMapper extends ArticleTagRelationDao {
+
 
 }

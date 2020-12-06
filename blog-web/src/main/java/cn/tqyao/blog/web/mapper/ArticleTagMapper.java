@@ -1,5 +1,6 @@
 package cn.tqyao.blog.web.mapper;
 
+import cn.tqyao.blog.dao.ArticleTagDao;
 import cn.tqyao.blog.entity.ArticleTag;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,6 @@ import org.springframework.stereotype.Repository;
  * @since 2020-12-02
  */
 @Repository
-public interface ArticleTagMapper extends BaseMapper<ArticleTag> {
+public interface ArticleTagMapper extends ArticleTagDao {
 
 }

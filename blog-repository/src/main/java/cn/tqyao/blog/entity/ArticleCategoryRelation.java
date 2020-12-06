@@ -1,7 +1,3 @@
-/**
- * Copyright 2020-2030 The author personally reserves all rights.
- */
-
 package cn.tqyao.blog.entity;
 
 import cn.tqyao.blog.base.BaseEntity;
@@ -11,16 +7,27 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author -Tanqy
+ * @since 2020-12-06
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="Article对象", description="文章列表")
-public class ArticleTagRelation extends BaseEntity {
+@ApiModel(value="ArticleCategoryRelation对象", description="")
+public class ArticleCategoryRelation extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "文章ID")
     private String articleId;
 
     @ApiModelProperty(value = "分类ID")
     private String categoryId;
+
 
 }

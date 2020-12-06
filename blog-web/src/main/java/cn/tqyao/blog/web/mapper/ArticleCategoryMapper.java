@@ -1,5 +1,6 @@
 package cn.tqyao.blog.web.mapper;
 
+import cn.tqyao.blog.dao.ArticleCategoryDao;
 import cn.tqyao.blog.entity.ArticleCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,6 @@ import org.springframework.stereotype.Repository;
  * @since 2020-12-02
  */
 @Repository
-public interface ArticleCategoryMapper extends BaseMapper<ArticleCategory> {
+public interface ArticleCategoryMapper extends ArticleCategoryDao {
 
 }

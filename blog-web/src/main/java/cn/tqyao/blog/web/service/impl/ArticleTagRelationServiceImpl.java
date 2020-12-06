@@ -1,6 +1,7 @@
 package cn.tqyao.blog.web.service.impl;
 
-import cn.tqyao.blog.web.null.ArticleTagRelation;
+
+import cn.tqyao.blog.entity.ArticleTagRelation;
 import cn.tqyao.blog.web.mapper.ArticleTagRelationMapper;
 import cn.tqyao.blog.web.service.IArticleTagRelationService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
