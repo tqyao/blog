@@ -2,6 +2,7 @@ package cn.tqyao.blog.web.controller;
 
 
 import cn.tqyao.blog.common.result.Result;
+import cn.tqyao.blog.dao.ArticleDao;
 import cn.tqyao.blog.web.dto.ArticleDTO;
 import cn.tqyao.blog.web.dto.MemberRegisterDTO;
 import cn.tqyao.blog.web.service.IArticleService;
@@ -9,11 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -33,10 +30,15 @@ public class ArticleController {
 
     @ApiOperation(value = "添加文章")
     @PostMapping
-    public Result add(@RequestBody ArticleDTO dto){
+    public Result<Boolean> add(@RequestBody ArticleDTO dto){
         return Result.status(articleService.addArticle(dto));
     }
 
+//    @ApiOperation(value = "修改文章")
+//    @PutMapping("/{id}")
+//    public Result<Boolean> update(@PathVariable String id,@RequestBody ArticleDTO dto){
+//        return Result.status(articleService.updateArticle(dto));
+//    }
 
 
 }

@@ -20,7 +20,7 @@ public class ArticleTagRelation extends BaseEntity {
     @ApiModelProperty(value = "文章ID")
     private String articleId;
 
-    @ApiModelProperty(value = "分类ID")
-    private String categoryId;
+    @ApiModelProperty(value = "标签ID")
+    private String tagId;
 
 }

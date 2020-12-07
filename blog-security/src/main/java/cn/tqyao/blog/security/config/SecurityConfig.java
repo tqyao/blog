@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         web.ignoring().antMatchers("/member/register");
         web.ignoring().antMatchers("/article/tag/**");
+        web.ignoring().antMatchers("/api/test/**");
 //        web.ignoring().antMatchers("/member/logout/**");
     }
 

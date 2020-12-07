@@ -35,6 +35,10 @@ public interface IMemberService extends IService<Member> {
      */
     void register(MemberRegisterDTO dto);
 
+    /**
+     * 获取其当前登录用户
+     * @return
+     */
     Member getCurrentMember();
 
 
