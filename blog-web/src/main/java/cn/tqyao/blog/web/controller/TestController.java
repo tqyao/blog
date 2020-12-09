@@ -4,16 +4,18 @@
 package cn.tqyao.blog.web.controller;
 
 import cn.tqyao.blog.common.result.Result;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -42,7 +44,19 @@ public class TestController {
         return Result.success(param);
     }
 
+    @ApiOperation(value = "测试获取请求头部的参数")
+    @GetMapping("/header")
+    public Result testGetHeaderParam(@ApiIgnore @RequestHeader(value = "Authorization",required = false) String header){
+        System.out.println(header);
+        return Result.success(header);
+    }
 
+    @ApiOperation(value = "测试获取请求头部的参数2")
+    @GetMapping("/header2")
+    public Result testGetHeaderParam2(@RequestHeader HttpHeaders headers){
+        headers.get("Authorization").forEach(System.out::println);
+        return Result.success();
+    }
 
     @Data
     @NoArgsConstructor

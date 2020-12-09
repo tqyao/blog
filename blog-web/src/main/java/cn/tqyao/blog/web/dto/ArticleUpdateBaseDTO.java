@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,13 +22,10 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="ArticleDTO", description="文章-DTO")
-public class ArticleDTO  implements Serializable {
+@ApiModel(value="ArticleUpdateBaseDTO", description="文章基本信息-DTO")
+public class ArticleUpdateBaseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-//    @ApiModelProperty(value = "内容ID")
-//    private String bodyId;
 
     @ApiModelProperty(value = "文章标题")
     private String title;
@@ -37,19 +33,6 @@ public class ArticleDTO  implements Serializable {
     @ApiModelProperty(value = "概要")
     private String summary;
 
-    @ApiModelProperty(value = "权重：0 -> 普通；1 -> 置顶")
-    private Integer weight;
 
-    @ApiModelProperty(value = "是否草稿:0 -> 否；1 -> 是")
-    private Integer draft;
-
-    @ApiModelProperty(value = "文章内容")
-    private ArticleBodyDTO articleBody;
-
-    @ApiModelProperty(value = "文章标签")
-    private Set<String> tagSet;
-
-    @ApiModelProperty(value = "文章分类")
-    private Set<String> categorySet;
 
 }

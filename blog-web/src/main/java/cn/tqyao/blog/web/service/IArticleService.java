@@ -1,7 +1,9 @@
 package cn.tqyao.blog.web.service;
 
 import cn.tqyao.blog.entity.Article;
+import cn.tqyao.blog.web.dto.ArticleBodyDTO;
 import cn.tqyao.blog.web.dto.ArticleDTO;
+import cn.tqyao.blog.web.dto.ArticleUpdateBaseDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,4 +19,12 @@ public interface IArticleService extends IService<Article> {
 
 
     Boolean addArticle(ArticleDTO dto);
+
+    Boolean updateBody(String id, ArticleBodyDTO dto);
+
+    Boolean updateBase(String id, ArticleUpdateBaseDTO dto);
+
+    Boolean updateWeight(String articleId, Integer weight);
+
+    Boolean updateDraft(String articleId, Integer draft);
 }

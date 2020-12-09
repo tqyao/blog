@@ -27,6 +27,8 @@ import java.security.Principal;
 @Api(tags = "用户-控制层")
 public class MemberController {
 
+    //TODO：1.过滤链异常处理（a.登录不传参数 b.传参格式错误...）
+    //      2.swagger拿不到请求头
 
     @Autowired
     private IMemberService memberService;
