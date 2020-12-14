@@ -4,6 +4,7 @@ import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.entity.ArticleTag;
 import cn.tqyao.blog.web.dto.ArticleTagDTO;
 import cn.tqyao.blog.web.vo.ArticleTagDetailVO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -23,7 +24,7 @@ public interface IArticleTagService extends IService<ArticleTag> {
 
     Boolean updateTag(String id, ArticleTagDTO dto);
 
-    Page<ArticleTag> listTag(BasePageDTO pageDTO);
+    IPage<ArticleTag> listTag(BasePageDTO pageDTO);
 
     ArticleTagDetailVO getDetailById(String tagId);
 }

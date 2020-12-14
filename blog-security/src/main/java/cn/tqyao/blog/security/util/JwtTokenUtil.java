@@ -11,6 +11,7 @@ import io.jsonwebtoken.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static cn.tqyao.blog.security.JwtTokenTypeEnum.ACCESS_TOKEN;
+import static cn.tqyao.blog.security.JwtTokenTypeEnum.REFRESH_TOKEN;
 
 /**
  * .<br>
@@ -112,7 +114,7 @@ public class JwtTokenUtil {
                 claims.put(CLAIM_KEY_TYPE, ACCESS_TOKEN.getTokenType());
                 return generateToken(claims, ACCESS_TOKEN_EXPIRATION);
             case REFRESH_TOKEN:
-                claims.put(CLAIM_KEY_TYPE, ACCESS_TOKEN.getTokenType());
+                claims.put(CLAIM_KEY_TYPE, REFRESH_TOKEN.getTokenType());
                 return generateToken(claims, REFRESH_TOKEN_EXPIRATION);
         }
         return null;
@@ -136,109 +138,118 @@ public class JwtTokenUtil {
     /**
      * 从token中获取JWT中的负载
      */
-    private Claims getClaimsFromToken(String token) {
-        Claims claims = null;
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(generalKey())
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            log.info("JWT格式验证失败:{}", token);
-        }
-        return claims;
+    public Claims getClaimsFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException,
+            MalformedJwtException, SignatureException, IllegalArgumentException {
+//        Claims claims = null;
+//        try {
+//            claims = Jwts.parser()
+//                    .setSigningKey(generalKey())
+//                    .parseClaimsJws(token)
+//                    .getBody();
+//        } catch (Exception e) {
+//            log.info("JWT格式验证失败:{}", token);
+//        }
+        return Jwts.parser()
+                .setSigningKey(generalKey())
+                .parseClaimsJws(token)
+                .getBody();
     }
 
+    /**
+     * 从载体中获取 token 类型
+     * @param claims
+     * @return
+     */
+    public String getTokenTypeFromClaims(Claims claims){
+        return (String) claims.get(CLAIM_KEY_TYPE);
+    }
+
+
 //    /**
-//     * 从token获取用户名
+//     * 从token中获取用户名
 //     * @param token
 //     * @return
 //     */
 //    public String getUsernameFromToken(String token) {
-//        String username;
+//        return (String) getClaimDetailFromToken(token, Claims.SUBJECT);
+//    }
+
+//    /**
+//     * 从token中获取JWT负载信息
+//     * @param token
+//     * @param key
+//     * @return
+//     */
+//    private Object getClaimDetailFromToken(String token, String key){
+//        String claimKey = "";
+//        Object claimValue;
+//        if (Claims.SUBJECT.equals(key)) {
+//            claimKey = key;
+//        }
+//        if (Claims.ISSUED_AT.equals(key)) {
+//            claimKey = key;
+//        }
+//        if (CLAIM_KEY_TYPE.equals(key)) {
+//            claimKey = key;
+//        }
 //        try {
 //            Claims claims = getClaimsFromToken(token);
-//            username = claims.getSubject();
+//            claimValue = claims.get(claimKey);
 //        } catch (Exception e) {
-//            username = null;
+//            //该异常包括：
+//            //claim值为null异常（claim = null） token不合法（过期）
+//            //key-value（claimKey = ""）不存在异常  claimValue = claims.get("");
+//            claimValue = null;
 //        }
-//        return username;
+//        return claimValue;
+//    }
+
+//    /**
+//     * 验证token是否还有效
+//     * @param token 客户端传入的token
+//     * @param userDetails 数据库中用户信息
+//     * @return
+//     */
+//    public boolean validateToken(String token, UserDetails userDetails) {
+//        String username = getUsernameFromToken(token);
+//        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
 //    }
 
     /**
-     * 从token中获取用户名
-     * @param token
-     * @return
-     */
-    public String getUsernameFromToken(String token) {
-        return (String) getClaimDetailFromToken(token, Claims.SUBJECT);
-    }
-
-    /**
-     * 从token中获取token类型
-     * @param token
-     * @return
-     */
-    public String getTokenTypeFromToken(String token) {
-        return (String) getClaimDetailFromToken(token, CLAIM_KEY_TYPE);
-    }
-
-    /**
-     * 从token中获取JWT负载信息
-     * @param token
-     * @param key
-     * @return
-     */
-    private Object getClaimDetailFromToken(String token, String key){
-        String claimKey = "";
-        Object claimValue;
-        if (Claims.SUBJECT.equals(key)) {
-            claimKey = key;
-        }
-        if (Claims.ISSUED_AT.equals(key)) {
-            claimKey = key;
-        }
-        if (CLAIM_KEY_TYPE.equals(key)) {
-            claimKey = key;
-        }
-        try {
-            Claims claims = getClaimsFromToken(token);
-            claimValue = claims.get(claimKey);
-        } catch (Exception e) {
-            //该异常包括：
-            //claim值为null异常（claim = null） token不合法（过期）
-            //key-value（claimKey = ""）不存在异常  claimValue = claims.get("");
-            claimValue = null;
-        }
-        return claimValue;
-    }
-
-    /**
      * 验证token是否还有效
-     * @param token 客户端传入的token
+     * @param claims 客户端传入的token
      * @param userDetails 数据库中用户信息
      * @return
      */
-    public boolean validateToken(String token, UserDetails userDetails) {
-        String username = getUsernameFromToken(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean validateToken(Claims claims, UserDetails userDetails) {
+        String username = claims.getSubject();
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(claims);
     }
 
     /**
      * 判断token是否已经失效
      */
-    private boolean isTokenExpired(String token) {
-        Date expiredDate = getExpiredDateFromToken(token);
+    private boolean isTokenExpired(Claims claims) {
+        Date expiredDate = claims.getExpiration();
         return expiredDate.before(new Date());
     }
 
-    /**
-     * 从token中获取过期时间
-     */
-    private Date getExpiredDateFromToken(String token) {
-        Claims claims = getClaimsFromToken(token);
-        return claims.getExpiration();
-    }
+
+//    /**
+//     * 判断token是否已经失效
+//     */
+//    private boolean isTokenExpired(String token) {
+//        Date expiredDate = getExpiredDateFromToken(token);
+//        return expiredDate.before(new Date());
+//    }
+//
+//    /**
+//     * 从token中获取过期时间
+//     */
+//    private Date getExpiredDateFromToken(String token) {
+//        Claims claims = getClaimsFromToken(token);
+//        return claims.getExpiration();
+//    }
 
     /**
      * 生成token的过期时间
@@ -249,6 +260,38 @@ public class JwtTokenUtil {
 
 
 
+//    /**
+//     * 获取请求token
+//     *
+//     * @param request
+//     * @return
+//     */
+//    public String getToken2(HttpServletRequest request) {
+//        String token = request.getHeader(TOKEN_HEADER);
+//        String tokenHead = this.TOKEN_HEAD;
+//        if (token == null) {
+//            token = request.getHeader("token");
+//            if (token == null) {
+//                return null;
+//            }
+//            token = token.substring(tokenHead.length());
+//        } else if (token.contains(tokenHead)) {
+//            token = token.trim();
+//            if (!org.springframework.util.StringUtils.startsWithIgnoreCase(token, TOKEN_HEAD)) {
+//                return null;
+//            }
+//            if (token.equalsIgnoreCase(TOKEN_HEAD)) {
+//                throw new BadCredentialsException("Empty bearer authentication token");
+//            }
+//            token = token.substring(tokenHead.length());
+//
+//        }
+//        if ("".equals(token)) {
+//            token = null;
+//        }
+//        return token;
+//    }
+
     /**
      * 获取请求token
      *
@@ -257,20 +300,23 @@ public class JwtTokenUtil {
      */
     public String getToken(HttpServletRequest request) {
         String token = request.getHeader(TOKEN_HEADER);
-        String tokenHead = this.TOKEN_HEAD;
         if (token == null) {
-            token = request.getHeader("token");
-            if (token == null) {
-                return null;
-            }
-            token = token.substring(tokenHead.length());
-        } else if (token.contains(tokenHead)) {
-            token = token.substring(tokenHead.length());
+            return null;
         }
+        token = token.trim();
+
         if ("".equals(token)) {
             token = null;
         }
-        return token;
+
+        if (!org.springframework.util.StringUtils.startsWithIgnoreCase(token, TOKEN_HEAD)) {
+            return null;
+        }
+        if (token.equalsIgnoreCase(TOKEN_HEAD)) {
+            throw new BadCredentialsException("Empty bearer authentication token");
+        }
+
+        return token.substring(TOKEN_HEAD.length());
     }
 
     /**

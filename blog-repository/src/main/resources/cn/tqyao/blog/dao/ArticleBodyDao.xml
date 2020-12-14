@@ -21,4 +21,14 @@
         content, content_html
     </sql>
 
+    <!-- 通用查询结果列 -->
+    <sql id="Body_Column_List">
+        ${alias}.id,
+        ${alias}.create_time,
+        ${alias}.update_time,
+        ${alias}.deleted,
+        ${alias}.content,
+        ${alias}.content_html
+    </sql>
+
 </mapper>

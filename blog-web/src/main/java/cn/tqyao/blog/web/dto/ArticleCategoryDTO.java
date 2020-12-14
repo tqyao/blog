@@ -18,7 +18,6 @@ import java.io.Serializable;
  * @since 2020-12-02
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="ArticleCategoryDTO", description="文章分类-DTO")
 public class ArticleCategoryDTO implements Serializable {

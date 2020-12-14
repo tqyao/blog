@@ -7,7 +7,7 @@ spring:
     date-format: yyyy-MM-dd
     time-zone: GMT +8
   application:
-    name: financial-service
+    name: Blog-Open
   ##数据库连接信息
   datasource:
     url: jdbc:mysql://${mysql.url}:${mysql.port}/${mysql.database}?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&useAffectedRows=true&serverTimezone=CTT
@@ -30,6 +30,7 @@ spring:
     port: ${redis.port}
     password: ${redis.password}
     database: ${redis.database}
+    timeout: ${redis.timeout}
 mybatis-plus:
   mapper-locations:
     - classpath:mapper/*.xml

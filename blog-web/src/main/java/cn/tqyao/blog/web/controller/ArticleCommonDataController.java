@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "文章-点赞、收藏")
 @RestController
-@RequestMapping("/article/common-data")
+@RequestMapping("/article-common-data")
 public class ArticleCommonDataController {
 
 }

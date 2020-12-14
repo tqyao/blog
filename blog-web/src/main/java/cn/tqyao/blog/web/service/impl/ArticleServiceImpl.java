@@ -1,13 +1,19 @@
 package cn.tqyao.blog.web.service.impl;
 
+import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.common.exception.CommonException;
+import cn.tqyao.blog.common.validated.group.UpdateValidated;
 import cn.tqyao.blog.entity.*;
-import cn.tqyao.blog.web.dto.ArticleBodyDTO;
-import cn.tqyao.blog.web.dto.ArticleDTO;
-import cn.tqyao.blog.web.dto.ArticleTagDTO;
-import cn.tqyao.blog.web.dto.ArticleUpdateBaseDTO;
+import cn.tqyao.blog.web.dto.*;
 import cn.tqyao.blog.web.mapper.ArticleMapper;
 import cn.tqyao.blog.web.service.*;
+import cn.tqyao.blog.web.util.PageUtil;
+import cn.tqyao.blog.web.vo.ArticleDetailVO;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -15,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import javax.validation.constraints.NotBlank;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -70,7 +78,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Optional.ofNullable(dto.getTagSet())
                 .map(set -> set.stream()
                         .map(tagId -> {
-                            //查询标签是否存在
+                            //TODO 查询标签是否存在
 
                             ArticleTagRelation articleTagRelation = new ArticleTagRelation();
                             articleTagRelation.setArticleId(articleId).setTagId(tagId);
@@ -82,7 +90,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Optional.ofNullable(dto.getCategorySet())
                 .map(set -> set.stream()
                         .map(categoryId -> {
-                            //查询文章分类是否存在
+                            //TODO 查询文章分类是否存在
 
                             ArticleCategoryRelation articleCategoryRelation = new ArticleCategoryRelation();
                             articleCategoryRelation.setArticleId(articleId).setCategoryId(categoryId);
@@ -119,6 +127,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean updateWeight(String articleId, Integer weight) {
         Article article = new Article();
         article.setWeight(weight);
@@ -127,11 +136,138 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean updateDraft(String articleId, Integer draft) {
         Article article = new Article();
         article.setDraft(draft);
         article.setId(articleId);
         return updateById(article);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean addTagForArticle(ArticleTagRelationDTO dto) {
+
+        Article article = Optional.ofNullable(getById(dto.getArticleId())).orElseThrow(() -> new CommonException("文章不存在"));
+
+        List<ArticleTagRelation> articleTagRelationList = new ArrayList<>();
+        Optional.ofNullable(dto.getTagSet())
+                .orElse(new HashSet<>()).forEach(tagId -> {
+                    //TODO 查询标签是否存在
+
+                    ArticleTagRelation articleTagRelation = new ArticleTagRelation();
+                    articleTagRelation
+                            .setArticleId(article.getId())
+                            .setTagId(tagId);
+                    articleTagRelationList.add(articleTagRelation);
+                });
+        return  articleTagRelationService.saveBatch(articleTagRelationList);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean deletedTagForArticle(ArticleTagRelationDTO dto) {
+        Article article = Optional.ofNullable(getById(dto.getArticleId())).orElseThrow(() -> new CommonException("文章不存在"));
+
+        List<String> relationList = Optional.ofNullable(dto.getTagSet())
+                .map(tagSet -> tagSet.stream()
+                        .map(tagId -> Optional.ofNullable(articleTagRelationService.getOne(Wrappers.<ArticleTagRelation>lambdaQuery()
+                                .eq(ArticleTagRelation::getArticleId, article.getId())
+                                .eq(ArticleTagRelation::getTagId, tagId)))
+                                .orElseThrow(() -> new CommonException("文章含有未被添加的标签")).getId())
+                        .collect(Collectors.toList())).orElse(new ArrayList<>());
+
+        return articleTagRelationService.removeByIds(relationList);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean addCategoryForArticle(ArticleCategoryRelationDTO dto) {
+        Article article = Optional.ofNullable(getById(dto.getArticleId())).orElseThrow(() -> new CommonException("文章不存在"));
+
+        List<ArticleCategoryRelation> list = new ArrayList<>();
+        Optional.ofNullable(dto.getCategorySet())
+                .orElse(new HashSet<>()).forEach(categoryId -> {
+            //TODO 查询分类是否存在
+
+            ArticleCategoryRelation articleCategoryRelation = new ArticleCategoryRelation();
+                    articleCategoryRelation
+                            .setArticleId(article.getId())
+                            .setCategoryId(categoryId);
+                    list.add(articleCategoryRelation);
+                });
+        return articleCategoryRelationService.saveBatch(list);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean deletedCategoryForArticle(ArticleCategoryRelationDTO dto) {
+        Article article = Optional.ofNullable(getById(dto.getArticleId())).orElseThrow(() -> new CommonException("文章不存在"));
+
+        List<String> categoryIds = dto.getCategorySet().stream()
+                .map(categoryId -> Optional.ofNullable(articleCategoryRelationService
+                        .getOne(Wrappers.<ArticleCategoryRelation>lambdaQuery()
+                                .eq(ArticleCategoryRelation::getArticleId, article.getId())
+                                .eq(ArticleCategoryRelation::getCategoryId, categoryId)))
+                        .orElseThrow(() -> new CommonException("文章含有未被添加的分类")).getId())
+                .collect(Collectors.toList());
+
+        return articleCategoryRelationService.removeByIds(categoryIds);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean deletedArticle(List<String> ids) {
+
+        List<String> bodyIdList = new ArrayList<>();
+        List<String> tagIdList = new ArrayList<>();
+        List<String> categoryList = new ArrayList<>();
+
+        ids.forEach(articleId -> {
+            Article article = Optional.ofNullable(getById(Wrappers.<Article>lambdaQuery().eq(Article::getId, articleId)))
+                    .orElseThrow(() -> new CommonException("文章不存在"));
+
+            bodyIdList.add(article.getBodyId());
+
+            Optional.ofNullable(articleTagRelationService.list(Wrappers.<ArticleTagRelation>lambdaQuery()
+                            .eq(ArticleTagRelation::getArticleId, articleId)))
+                    .ifPresent(articleTagRelationList -> articleTagRelationList.forEach(relation -> {
+                        tagIdList.add(relation.getTagId());
+                    }));
+
+            Optional.ofNullable(articleCategoryRelationService.list(Wrappers.<ArticleCategoryRelation>lambdaQuery()
+                            .eq(ArticleCategoryRelation::getArticleId, articleId)))
+                    .ifPresent(articleCategoryRelationList -> articleCategoryRelationList.forEach(relation -> {
+                        categoryList.add(relation.getCategoryId());
+                    }));
+        });
+
+        articleBodyService.removeByIds(bodyIdList);
+        articleTagRelationService.removeByIds(tagIdList);
+        articleCategoryRelationService.removeByIds(categoryList);
+        removeByIds(ids);
+        return true;
+    }
+
+    @Override
+    public IPage<Article> homeList(BasePageDTO dto) {
+        Page<Article> page = PageUtil.getPage(dto);
+        return page(page,Wrappers.<Article>lambdaQuery().orderByDesc(Article::getCreateTime));
+    }
+
+    @Override
+    public IPage<Article> personalArticleList(BasePageDTO dto) {
+        Page<Article> page = PageUtil.getPage(dto);
+        Member currentMember = memberService.getCurrentMember();
+
+        return page(page, Wrappers.<Article>lambdaQuery()
+                .eq(Article::getAuthorId, currentMember.getId())
+                .orderByDesc(Article::getCreateTime));
+    }
+
+    @Override
+    public ArticleDetailVO getDetail(String articleId) {
+        return baseMapper.getDetail(articleId);
     }
 
 

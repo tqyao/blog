@@ -7,10 +7,12 @@ import cn.tqyao.blog.entity.ArticleTag;
 import cn.tqyao.blog.web.dto.ArticleTagDTO;
 import cn.tqyao.blog.web.service.IArticleTagService;
 import cn.tqyao.blog.web.vo.ArticleTagDetailVO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * <p>
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "文章-标签")
 @RestController
-@RequestMapping("/article/tag")
+@RequestMapping("/article-tags")
 public class ArticleTagController {
 
     @Autowired
@@ -30,8 +32,6 @@ public class ArticleTagController {
 
     @ApiOperation(value = "新增标签")
     @PostMapping
-//    @ApiImplicitParam(name = "dto", value = "ArticleTagDTO", required = true, paramType = "body",
-//            dataType = "ArticleTagDTO", dataTypeClass = ArticleTagDTO.class)
     public Result<Boolean> add(@RequestBody ArticleTagDTO dto) {
         return Result.status(articleTagService.addTag(dto));
     }
@@ -44,7 +44,7 @@ public class ArticleTagController {
 
     @ApiOperation(value = "查看所有标签")
     @GetMapping("/all")
-    public Result list(BasePageDTO page) {
+    public Result<IPage<ArticleTag>> list(BasePageDTO page) {
         return Result.success(articleTagService.listTag(page));
     }
 
@@ -54,15 +54,18 @@ public class ArticleTagController {
         return Result.success(articleTagService.getById(tagId));
     }
 
+    //TODO 标签详情
+    @ApiIgnore
     @ApiOperation(value = "查看标签详情")
     @GetMapping("/detail/{tag-id}")
     public Result<ArticleTagDetailVO> getDetail(@PathVariable("tag-id") String tagId) {
         return Result.success(articleTagService.getDetailById(tagId));
     }
 
+
     @ApiOperation(value = "删除标签")
     @DeleteMapping("/{tag-id}")
-    public Result deleted(@PathVariable("tag-id") String tagId) {
+    public Result<Boolean> deleted(@PathVariable("tag-id") String tagId) {
         return Result.status(articleTagService.removeById(tagId));
     }
 

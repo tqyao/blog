@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.tqyao.blog.web.mapper.ArticleMapper">
+    <resultMap id="ArticleDetailMap" type="cn.tqyao.blog.web.vo.ArticleDetailVO"
+               extends="cn.tqyao.blog.dao.ArticleDao.BaseResultMap">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <association property="memberBaseVO" columnPrefix="member_" resultMap="cn.tqyao.blog.web.mapper.MemberMapper.MemberBaseMap" />
+        <association property="articleBody" resultMap="cn.tqyao.blog.dao.ArticleBodyDao.BaseResultMap" />
+        <collection property="tagList" columnPrefix="tag_" resultMap="cn.tqyao.blog.dao.ArticleTagDao.BaseResultMap"/>
+        <collection property="categoryList" columnPrefix="category_" resultMap="cn.tqyao.blog.dao.ArticleCategoryDao.BaseResultMap"/>
+    </resultMap>
 
+    <select id="getDetail" resultMap="ArticleDetailMap">
+            SELECT
+                a.*,
+                bm.id member_id,
+                bm.nickname member_nickname,
+                bm.avatar member_avatar,
+                ab.id body_id,
+                ab.content,
+                ab.content_html,
+                `at`.id tag_id,
+                `at`.`name` tag_name,
+                `at`.avatar tag_avatar,
+                ac.id category_id,
+                ac.name category_name,
+                ac.avatar category_avatar
+            FROM
+                (article `a`
+                INNER JOIN `b_member` `bm` ON a.author_id = bm.id
+                INNER JOIN article_body `ab` ON ab.id = a.body_id)
+                LEFT JOIN article_tag_relation `atr` ON  atr.article_id = a.id
+                LEFT JOIN article_tag `at` ON at.id = atr.tag_id
+                LEFT JOIN article_category_relation `acr` ON acr.article_id = a.id
+                LEFT JOIN article_category `ac` ON ac.id = acr.category_id
+            WHERE
+                a.id = #{articleId}
+    </select>
 </mapper>

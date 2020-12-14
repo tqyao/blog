@@ -44,14 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/v3/**");
         web.ignoring().antMatchers("/swagger**/**");
         web.ignoring().antMatchers("/webjars/**");
-
-//        web.ignoring().antMatchers("/v2/api-docs/**");
-//        web.ignoring().antMatchers("/swagger.json");
-//        web.ignoring().antMatchers("/swagger-ui.html");
-//        web.ignoring().antMatchers("/swagger-resources/**");
-//        web.ignoring().antMatchers("/webjars/**");
-
         //swagger-ui end
+
         //静态资源 start
         web.ignoring().antMatchers("/**/*.js");
         web.ignoring().antMatchers("/**/*.css");
@@ -59,8 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/**/*.ico");
         //静态资源 start
 
-        web.ignoring().antMatchers("/member/register");
-        web.ignoring().antMatchers("/article/tag/**");
+        web.ignoring().antMatchers("/**/error");
+
+        web.ignoring().antMatchers("/members/register");
+        web.ignoring().antMatchers("/article-tags/**");
+        web.ignoring().antMatchers("/article-categories/**");
         web.ignoring().antMatchers("/api/test/**");
 //        web.ignoring().antMatchers("/member/logout/**");
     }

@@ -1,19 +1,22 @@
 package cn.tqyao.blog.web.controller;
 
 
+import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.common.result.Result;
 import cn.tqyao.blog.dao.ArticleDao;
-import cn.tqyao.blog.web.dto.ArticleBodyDTO;
-import cn.tqyao.blog.web.dto.ArticleDTO;
-import cn.tqyao.blog.web.dto.ArticleUpdateBaseDTO;
-import cn.tqyao.blog.web.dto.MemberRegisterDTO;
+import cn.tqyao.blog.entity.Article;
+import cn.tqyao.blog.entity.ArticleTagRelation;
+import cn.tqyao.blog.web.dto.*;
 import cn.tqyao.blog.web.service.IArticleService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import cn.tqyao.blog.web.vo.ArticleDetailVO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -25,14 +28,14 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "文章-列表")
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/articles")
 public class ArticleController {
 
     @Autowired
     private IArticleService articleService;
 
     @ApiOperation(value = "添加文章")
-    @PostMapping
+    @PostMapping("/article")
     public Result<Boolean> add(@RequestBody ArticleDTO dto) {
         return Result.status(articleService.addArticle(dto));
     }
@@ -60,11 +63,77 @@ public class ArticleController {
 
     @ApiOperation(value = "是否是草稿", notes = "局部修改")
     @PatchMapping("/draft/{article-id}/{flag}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "article-id", value = "文章ID", required = true,
+                    paramType = "path", dataTypeClass = String.class, dataType = "String"),
+            @ApiImplicitParam(name = "flag", value = "是否草稿:0 -> 否；1 -> 是", required = true,
+                    defaultValue = "1", allowableValues = "0,1",
+                    paramType = "path", dataTypeClass = Integer.class, dataType = "Integer")
+    })
     public Result<Boolean> updateDraft(@ApiParam(value = "文章ID")@PathVariable("article-id") String articleId,
-                                        @ApiParam(value = "是否草稿:0 -> 否；1 -> 是")@PathVariable("flag") Integer draft){
+                                       @PathVariable("flag") Integer draft){
         return Result.status(articleService.updateDraft(articleId, draft));
     }
 
+    @ApiOperation(value = "为文章添加标签")
+    @PostMapping("/tags")
+    public Result<Boolean> addTagForArticle(@RequestBody ArticleTagRelationDTO dto){
+        return Result.status(articleService.addTagForArticle(dto));
+    }
+
+    @ApiOperation(value = "删除文章标签")
+    @DeleteMapping("/tags")
+    public Result<Boolean> deletedTagForArticle(@RequestBody ArticleTagRelationDTO dto){
+        return Result.status(articleService.deletedTagForArticle(dto));
+    }
+
+    @ApiOperation(value = "为文章添加分类")
+    @PostMapping("/category")
+    public Result<Boolean> addCategoryForArticle(@RequestBody ArticleCategoryRelationDTO dto){
+        return Result.status(articleService.addCategoryForArticle(dto));
+    }
+
+    @ApiOperation(value = "删除文章分类")
+    @DeleteMapping("/category")
+    public Result<Boolean> deletedCategoryForArticle(@RequestBody ArticleCategoryRelationDTO dto){
+        return Result.status(articleService.deletedCategoryForArticle(dto));
+    }
+
+    @ApiOperation(value = "删除文章")
+    @DeleteMapping("/article")
+    @ApiImplicitParam(name = "ids[]",
+            value = "id集合",
+            required = true,
+            paramType = "query",
+            dataTypeClass = String.class,
+            dataType = "String")
+    public Result<Boolean> deletedArticle(@RequestParam("ids") List<String> ids){
+        return Result.status(articleService.deletedArticle(ids));
+    }
+
+    @ApiOperation(value = "首页文章列表",notes = "文章列表分页")
+    @GetMapping("/list")
+    public Result<IPage<Article>> list(BasePageDTO dto){
+        return Result.success(articleService.homeList(dto));
+    }
+
+    @ApiOperation(value = "获取个人主页文章信息", notes = "文章列表")
+    @GetMapping("/personal-list")
+    public Result<IPage<Article>> personalArticleList(BasePageDTO dto){
+        return Result.success(articleService.personalArticleList(dto));
+    }
+
+    @ApiOperation(value = "获取文章详细", notes = "文章body、分类、标签")
+    @GetMapping("/detail/{id}")
+    @ApiImplicitParam(name = "id",
+            value = "文章ID",
+            required = true,
+            paramType = "path",
+            dataTypeClass = String.class,
+            dataType = "String")
+    public Result<ArticleDetailVO> getArticleDetail(@PathVariable("id") String articleId){
+        return Result.success(articleService.getDetail(articleId));
+    }
 
 
 }

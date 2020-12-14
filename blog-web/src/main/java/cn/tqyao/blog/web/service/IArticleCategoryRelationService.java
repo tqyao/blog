@@ -2,6 +2,7 @@ package cn.tqyao.blog.web.service;
 
 import cn.tqyao.blog.entity.ArticleCategoryRelation;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>

@@ -32,27 +32,12 @@ public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) {
         if (authException instanceof TokenAuthenticationException) {
+            log.warn("认证失败 -> token 错误：, uri:{}, caused by:{}",
+                    request.getRequestURI() ,authException);
             TokenAuthenticationException tokenException = (TokenAuthenticationException) authException;
-            String msg = tokenException.getResultCode().getMsg();
-            if (ResultCode.TOKEN_PARSE_ERROR.getMsg().equals(msg)) {
-                log.warn("认证失败-> token解析异常:token过期/格式等错误, uri:{}, caused by:{}",
-                        request.getRequestURI() ,tokenException);
-            }
-            if (ResultCode.TOKEN_TYPE_ERROR.getMsg().equals(msg)) {
-                log.warn("认证失败-> token类型异常:access_token/refresh_token, uri: {} , caused by: ",
-                        request.getRequestURI(), tokenException);
-            }
-            if (ResultCode.TOKEN_AUTHORIZED_FAIL_ERROR.getMsg().equals(msg)) {
-                log.warn("认证失败-> 存在伪造token可能:username: {} 不存在于数据库中, uri: {} , caused by: {}",
-                        tokenException.getUsername() , request.getRequestURI(), tokenException);
-            }
-            if (ResultCode.TOKEN_INVALIDATION_ERROR.getMsg().equals(msg)) {
-                log.warn("认证失败-> 无效token:存在于黑名单中, uri: {} , caused by: {}",
-                        request.getRequestURI(), tokenException);
-            }
             ResponseUtil.send(response, Result.custom(tokenException.getResultCode()));
         } else {
-            log.warn("认证失败-> 未登录认证, uri: {} , caused by: {}",
+            log.warn("认证失败 -> 未登录认证, uri: {} , caused by: {}",
                     request.getRequestURI(), authException);
             ResponseUtil.send(response, Result.custom(ResultCode.UNAUTHORIZED));
         }

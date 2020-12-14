@@ -10,6 +10,7 @@ redis:
   port: 6379
   password: 790461387
   database: 0
+  timeout: 30s
 swagger:
   enable: true
 # 配置slq打印日志

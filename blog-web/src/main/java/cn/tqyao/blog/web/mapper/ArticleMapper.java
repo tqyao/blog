@@ -3,6 +3,7 @@ package cn.tqyao.blog.web.mapper;
 import cn.tqyao.blog.dao.ArticleDao;
 import cn.tqyao.blog.entity.Article;
 
+import cn.tqyao.blog.web.vo.ArticleDetailVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +18,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArticleMapper extends ArticleDao {
 
+    ArticleDetailVO getDetail(String articleId);
 }

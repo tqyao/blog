@@ -17,10 +17,11 @@ public enum ResultCode implements IResultCode {
     USER_BAD_CREDENTIALS_ERROR(3005,"用户名或者密码输入错误"),
 
     UNAUTHORIZED(401, "未认证"),
-    TOKEN_PARSE_ERROR(4000,"token解析错误,请尝试刷新"),
-    TOKEN_TYPE_ERROR(4001,"token类型错误"),
-    TOKEN_AUTHORIZED_FAIL_ERROR(4002,"token认证失败"),
+    TOKEN_PARSE_ERROR(4000,"token解析错误,请确保使用正确的token格式"),
+    TOKEN_TYPE_ERROR(4001,"token类型错误,请更换合适类型"),
+    TOKEN_AUTHORIZED_FAIL_ERROR(4002,"token认证失败,请尝试刷新"),
     TOKEN_INVALIDATION_ERROR(4003,"无效token"),
+    TOKEN_HEAD_ERROR(4004,"token空载体认证令牌"),
 
     SYSTEM_INNER_ERROR(5001,"系统内部出错");
     private long code;

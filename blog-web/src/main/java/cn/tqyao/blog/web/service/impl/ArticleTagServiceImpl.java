@@ -7,11 +7,13 @@ import cn.tqyao.blog.web.mapper.ArticleTagMapper;
 import cn.tqyao.blog.web.service.IArticleTagService;
 import cn.tqyao.blog.web.util.PageUtil;
 import cn.tqyao.blog.web.vo.ArticleTagDetailVO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.lettuce.core.dynamic.support.GenericTypeResolver;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.parser.TagElement;
 import java.util.List;
@@ -29,6 +31,7 @@ import java.util.Optional;
 public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, ArticleTag> implements IArticleTagService {
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean addTag(ArticleTagDTO dto) {
         ArticleTag tag = new ArticleTag();
         BeanUtils.copyProperties(dto, tag);
@@ -36,6 +39,7 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean updateTag(String id, ArticleTagDTO dto) {
         ArticleTag tag = new ArticleTag();
         BeanUtils.copyProperties(dto, tag);
@@ -44,7 +48,7 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
     }
 
     @Override
-    public Page<ArticleTag> listTag(BasePageDTO pageDTO) {
+    public IPage<ArticleTag> listTag(BasePageDTO pageDTO) {
         return page(PageUtil.getPage(pageDTO));
     }
 

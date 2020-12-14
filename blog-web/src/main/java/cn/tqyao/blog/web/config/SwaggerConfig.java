@@ -114,7 +114,8 @@ public class SwaggerConfig  {
     private List<SecurityContext> securityContexts() {
         //设置需要登录认证的路径
         List<SecurityContext> result = new ArrayList<>();
-        result.add(getContextByPath("/member/.*"));
+        result.add(getContextByPath("/members/.*"));
+        result.add(getContextByPath("/articles/*/.*"));
         return result;
     }
 
@@ -136,8 +137,6 @@ public class SwaggerConfig  {
 //        authorizationScopes[0] = authorizationScope;
 //        result.add(new SecurityReference("Authorization", authorizationScopes));
     }
-
-
 
     @SafeVarargs
     private final <T> Set<T> newHashSet(T... ts) {

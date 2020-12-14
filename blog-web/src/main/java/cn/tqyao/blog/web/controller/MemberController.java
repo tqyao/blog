@@ -23,12 +23,11 @@ import java.security.Principal;
  */
 @Validated
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 @Api(tags = "用户-控制层")
 public class MemberController {
 
     //TODO：1.过滤链异常处理（a.登录不传参数 b.传参格式错误...）
-    //      2.swagger拿不到请求头
 
     @Autowired
     private IMemberService memberService;
@@ -51,8 +50,6 @@ public class MemberController {
     //TODO:
     // 1.了解经过Security过滤器放权和不经过其放权
     // 2.了解Redis缓存应用
-    // 3.整合3.0 Swagger
-    // 4.JAVA基础：异常，多线程，IO
     // 5.logout接口
     @ApiOperation(value = "登出")
     @GetMapping("/logout/{access_token}/{refresh_token}")
