@@ -3,12 +3,17 @@ package cn.tqyao.blog.web.controller;
 
 import cn.tqyao.blog.common.result.Result;
 import cn.tqyao.blog.common.result.ResultCode;
+import cn.tqyao.blog.security.JwtAuthenticationToken;
+import cn.tqyao.blog.security.util.RedisUtil;
+import cn.tqyao.blog.security.util.SecurityUtil;
 import cn.tqyao.blog.web.dto.MemberRegisterDTO;
 import cn.tqyao.blog.web.service.IMemberService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Principal;
 
@@ -42,7 +47,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "获取当前登录用户信息")
-    @GetMapping("/current")
+    @GetMapping("/member/current")
     public Result getCurrentMember(){
         return Result.success(memberService.getCurrentMember());
     }
@@ -52,17 +57,30 @@ public class MemberController {
     // 2.了解Redis缓存应用
     // 5.logout接口
     @ApiOperation(value = "登出")
-    @GetMapping("/logout/{access_token}/{refresh_token}")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "acToken", value = "access_token", required = true, paramType = "path",
-//                    dataTypeClass = String.class),
-//            @ApiImplicitParam(name = "refToken", value = "refresh_token", required = true, paramType = "path",
-//                    dataTypeClass = String.class)
-//    })
-    public Result logout(@PathVariable("access_token") String acToken,
-                         @PathVariable("refresh_token")String refToken){
-        memberService.logout(acToken, refToken);
+    @GetMapping("/member/logout/{refresh_token}")
+    @ApiImplicitParam(name = "refresh_token", value = "refresh类型的token", required = true,
+            paramType = "path", dataType = "String", dataTypeClass = String.class)
+    public Result logout(@ApiIgnore @RequestHeader(value = "Authorization", required = false) String accessToken,
+                         @PathVariable("refresh_token")String refreshToken){
+        memberService.logout(accessToken, refreshToken);
         return Result.success();
+    }
+
+    @ApiOperation(value = "无感登录",notes = "刷新token")
+    @GetMapping("/refresh-token/{access-token}/{refresh-token}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access-token", value = "access类型的token", required = true,
+                    paramType = "path", dataType = "String", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "refresh-token", value = "refresh类型的token", required = true,
+                    paramType = "path", dataType = "String", dataTypeClass = String.class)
+    })
+    public Result<JwtAuthenticationToken> refreshToken(
+            @PathVariable(value = "access-token") String accessToken,
+            @PathVariable("refresh-token") String refreshToken){
+
+        //TODO: 30分钟内刷新过，返回原token
+
+        return Result.success("刷新成功！",memberService.refreshToken(accessToken, refreshToken));
     }
 
 }

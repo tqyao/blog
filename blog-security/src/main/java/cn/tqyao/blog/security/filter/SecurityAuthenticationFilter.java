@@ -4,6 +4,7 @@
 package cn.tqyao.blog.security.filter;
 
 import cn.tqyao.blog.security.JwtAuthenticationToken;
+import cn.tqyao.blog.security.JwtTokenTypeEnum;
 import cn.tqyao.blog.security.exception.TokenAuthenticationException;
 import cn.tqyao.blog.security.util.SecurityUtil;
 
@@ -52,7 +53,7 @@ public class SecurityAuthenticationFilter extends BasicAuthenticationFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         Authentication authentication;
         try {
-            authentication = securityUtil.checkTokenValid(httpServletRequest);
+            authentication = securityUtil.checkAccessTokenValid(httpServletRequest);
             if (null != authentication) {
                 if (authentication instanceof JwtAuthenticationToken) {
                     JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;

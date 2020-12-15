@@ -55,11 +55,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         web.ignoring().antMatchers("/**/error");
 
-        web.ignoring().antMatchers("/members/register");
+
+        web.ignoring().antMatchers("/members/member/register");
         web.ignoring().antMatchers("/article-tags/**");
         web.ignoring().antMatchers("/article-categories/**");
+        web.ignoring().antMatchers("/articles/list");
+        web.ignoring().antMatchers("/articles//detail/*");
         web.ignoring().antMatchers("/api/test/**");
-//        web.ignoring().antMatchers("/member/logout/**");
+
     }
 
 
@@ -74,7 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 关闭跨站请求防护及不使用session
         http.cors().and()
                 .csrf().disable().authorizeRequests()
-//                .antMatchers("/member/register","/member/logout").permitAll()
+                .antMatchers("/members/member/refresh-token/**").permitAll()
+//                .antMatchers("/members/register","/members/logout").permitAll()
                 .and()
                 // 任何请求需要身份认证
                 .authorizeRequests()

@@ -3,7 +3,7 @@
 <mapper namespace="cn.tqyao.blog.web.mapper.ArticleMapper">
     <resultMap id="ArticleDetailMap" type="cn.tqyao.blog.web.vo.ArticleDetailVO"
                extends="cn.tqyao.blog.dao.ArticleDao.BaseResultMap">
-        <id column="id" jdbcType="BIGINT" property="id" />
+        <id column="id" jdbcType="VARCHAR" property="id" />
         <association property="memberBaseVO" columnPrefix="member_" resultMap="cn.tqyao.blog.web.mapper.MemberMapper.MemberBaseMap" />
         <association property="articleBody" resultMap="cn.tqyao.blog.dao.ArticleBodyDao.BaseResultMap" />
         <collection property="tagList" columnPrefix="tag_" resultMap="cn.tqyao.blog.dao.ArticleTagDao.BaseResultMap"/>

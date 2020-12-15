@@ -2,6 +2,7 @@ package cn.tqyao.blog.web.service;
 
 
 import cn.tqyao.blog.entity.Member;
+import cn.tqyao.blog.security.JwtAuthenticationToken;
 import cn.tqyao.blog.web.config.MemberDetails;
 import cn.tqyao.blog.web.dto.MemberRegisterDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -41,8 +42,7 @@ public interface IMemberService extends IService<Member> {
      */
     Member getCurrentMember();
 
+    void logout(String accessToken,String refreshToken);
 
-
-    void logout(String acToken,String refToken);
-
+    JwtAuthenticationToken refreshToken(String accessToken, String refreshToken);
 }

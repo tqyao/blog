@@ -3,7 +3,9 @@ package cn.tqyao.blog.web.service.impl;
 import cn.tqyao.blog.common.exception.CommonException;
 import cn.tqyao.blog.common.result.ResultCode;
 import cn.tqyao.blog.entity.Member;
+import cn.tqyao.blog.security.JwtAuthenticationToken;
 import cn.tqyao.blog.security.util.RedisUtil;
+import cn.tqyao.blog.security.util.SecurityUtil;
 import cn.tqyao.blog.web.config.MemberDetails;
 import cn.tqyao.blog.web.dto.MemberRegisterDTO;
 import cn.tqyao.blog.web.mapper.MemberMapper;
@@ -44,27 +46,16 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
      */
     @Value("${jwt.token-head}")
     private String tokenHead;
-
-    //    @Autowired
-//    private RedisUtil redisUtil;
-//    @Autowired
-//    private CustomizeRedisProperties redisProperties;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private SecurityUtil securityUtil;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private IMemberCacheService memberCacheService;
-    //    @Override
-//    public MemberDetails loadUserByUsername(String username) {
-//        return Optional.ofNullable(memberCacheService.getMember(username))
-//                .orElseGet(() -> {
-//                    Member one = getOne(new LambdaQueryWrapper<Member>().eq(Member::getUsername, username));
-//                    memberCacheService.setMember(one);
-//                    return one;
-//                });
-//    }
+
 
     @Override
     public MemberDetails loadUserByUsername(String username) {
@@ -118,16 +109,28 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .map(auth -> Optional.ofNullable(auth.getPrincipal())
                         .filter(obj -> obj instanceof MemberDetails)
-                        .map(obj -> (MemberDetails) obj).get().getMember())
+                        .map(obj -> (MemberDetails) obj)
+                        .orElse(new MemberDetails()).getMember())
                 .orElseThrow(() -> new CommonException(ResultCode.UNAUTHORIZED));
     }
 
     @Override
-    public void logout(String acToken, String refToken) {
+    public void logout(String accessToken, String refreshToken) {
         Optional.ofNullable(getCurrentMember()).ifPresent(member -> memberCacheService.delMember(member.getId()));
-        acToken = getTokenBody(acToken);
-        refToken = getTokenBody(refToken);
-        redisUtil.addBlacklistSet(acToken, refToken);
+        accessToken = getTokenBody(accessToken);
+        refreshToken = getTokenBody(refreshToken);
+        redisUtil.addBlacklistSet(accessToken, refreshToken);
+    }
+
+    @Override
+    public JwtAuthenticationToken refreshToken(String accessToken, String refreshToken) {
+        //先认证刷新
+        accessToken = getTokenBody(accessToken);
+        refreshToken = getTokenBody(refreshToken);
+        JwtAuthenticationToken token = securityUtil.getRefreshToken(refreshToken);
+        //旧token加入黑名单
+        redisUtil.addBlacklistSet(accessToken, refreshToken);
+        return token;
     }
 
     /**

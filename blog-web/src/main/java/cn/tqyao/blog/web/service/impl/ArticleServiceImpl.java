@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
@@ -153,15 +154,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<ArticleTagRelation> articleTagRelationList = new ArrayList<>();
         Optional.ofNullable(dto.getTagSet())
                 .orElse(new HashSet<>()).forEach(tagId -> {
-                    //TODO 查询标签是否存在
+            //TODO 查询标签是否存在
 
-                    ArticleTagRelation articleTagRelation = new ArticleTagRelation();
-                    articleTagRelation
-                            .setArticleId(article.getId())
-                            .setTagId(tagId);
-                    articleTagRelationList.add(articleTagRelation);
-                });
-        return  articleTagRelationService.saveBatch(articleTagRelationList);
+            ArticleTagRelation articleTagRelation = new ArticleTagRelation();
+            articleTagRelation
+                    .setArticleId(article.getId())
+                    .setTagId(tagId);
+            articleTagRelationList.add(articleTagRelation);
+        });
+        return articleTagRelationService.saveBatch(articleTagRelationList);
     }
 
     @Override
@@ -191,11 +192,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             //TODO 查询分类是否存在
 
             ArticleCategoryRelation articleCategoryRelation = new ArticleCategoryRelation();
-                    articleCategoryRelation
-                            .setArticleId(article.getId())
-                            .setCategoryId(categoryId);
-                    list.add(articleCategoryRelation);
-                });
+            articleCategoryRelation
+                    .setArticleId(article.getId())
+                    .setCategoryId(categoryId);
+            list.add(articleCategoryRelation);
+        });
         return articleCategoryRelationService.saveBatch(list);
     }
 
@@ -230,13 +231,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             bodyIdList.add(article.getBodyId());
 
             Optional.ofNullable(articleTagRelationService.list(Wrappers.<ArticleTagRelation>lambdaQuery()
-                            .eq(ArticleTagRelation::getArticleId, articleId)))
+                    .eq(ArticleTagRelation::getArticleId, articleId)))
                     .ifPresent(articleTagRelationList -> articleTagRelationList.forEach(relation -> {
                         tagIdList.add(relation.getTagId());
                     }));
 
             Optional.ofNullable(articleCategoryRelationService.list(Wrappers.<ArticleCategoryRelation>lambdaQuery()
-                            .eq(ArticleCategoryRelation::getArticleId, articleId)))
+                    .eq(ArticleCategoryRelation::getArticleId, articleId)))
                     .ifPresent(articleCategoryRelationList -> articleCategoryRelationList.forEach(relation -> {
                         categoryList.add(relation.getCategoryId());
                     }));
@@ -252,7 +253,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public IPage<Article> homeList(BasePageDTO dto) {
         Page<Article> page = PageUtil.getPage(dto);
-        return page(page,Wrappers.<Article>lambdaQuery().orderByDesc(Article::getCreateTime));
+        return page(page, Wrappers.<Article>lambdaQuery().orderByDesc(Article::getCreateTime));
     }
 
     @Override
@@ -266,7 +267,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ArticleDetailVO getDetail(String articleId) {
+
+        Article article = Optional.ofNullable(getById(articleId)).orElseThrow(() -> new CommonException("文章不存在"));
+        // 文章观看数+1
+        Article insertArticle = new Article();
+        insertArticle.setViewCount(article.getViewCount()+1);
+        insertArticle.setId(article.getId());
+        updateById(insertArticle);
         return baseMapper.getDetail(articleId);
     }
 
