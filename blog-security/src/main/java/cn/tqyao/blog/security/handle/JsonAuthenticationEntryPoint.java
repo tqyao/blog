@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * token 认证失败端点
  * .<br>
  *
  * @author tanqinyao<br>
@@ -31,16 +32,20 @@ public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) {
-        if (authException instanceof TokenAuthenticationException) {
-            log.warn("认证失败 -> token 错误：, uri:{}, caused by:{}",
-                    request.getRequestURI() ,authException);
-            TokenAuthenticationException tokenException = (TokenAuthenticationException) authException;
-            ResponseUtil.send(response, Result.custom(tokenException.getResultCode()));
-        } else {
-            log.warn("认证失败 -> 未登录认证, uri: {} , caused by: {}",
-                    request.getRequestURI(), authException);
-            ResponseUtil.send(response, Result.custom(ResultCode.UNAUTHORIZED));
-        }
+//        if (authException instanceof TokenAuthenticationException) {
+//            log.warn("认证失败 -> token 错误：, uri:{}, caused by:{}",
+//                    request.getRequestURI() ,authException);
+//            TokenAuthenticationException tokenException = (TokenAuthenticationException) authException;
+//            ResponseUtil.send(response, Result.custom(tokenException.getResultCode()));
+//        } else {
+//            log.warn("认证失败 -> 未登录认证, uri: {} , caused by: {}",
+//                    request.getRequestURI(), authException);
+//            ResponseUtil.send(response, Result.custom(ResultCode.UNAUTHORIZED));
+//        }
+
+        log.warn("认证失败 ->  uri: {} , caused by: {}",
+                request.getRequestURI(), authException);
+        ResponseUtil.send(response, Result.custom(ResultCode.UNAUTHORIZED));
 
     }
 }

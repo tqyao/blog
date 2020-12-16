@@ -78,11 +78,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request){
         log.warn("参数校验不合法 异常，uri：{}，caused by：{}", request.getRequestURI(), e.getMessage());
-        List<ParameterInvalidResult> parameterInvalidResult = getParameterInvalidResult(e);
-        if (CollectionUtils.isEmpty(parameterInvalidResult)){
-            return Result.custom(ResultCode.VALIDATE_FAILED,e.getMessage());
-        }
-        return Result.custom(ResultCode.VALIDATE_FAILED,parameterInvalidResult);
+        return validateFail(e);
     }
 
     /**
@@ -94,12 +90,27 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BindException.class)
     public Result handleBindException(BindException e, HttpServletRequest request){
         log.warn("参数校验不合法 异常，uri：{}，caused by：{}", request.getRequestURI(), e.getMessage());
-        List<ParameterInvalidResult> parameterInvalidResult = getParameterInvalidResult(e);
+        return validateFail(e);
+    }
+
+    private Result validateFail(Exception e){
+        List<ParameterInvalidResult> parameterInvalidResult = null;
+        if (e instanceof BindException) {
+            BindException be = (BindException) e;
+            parameterInvalidResult = getParameterInvalidResult(be);
+        }
+        if (e instanceof MethodArgumentNotValidException) {
+            MethodArgumentNotValidException me = (MethodArgumentNotValidException) e;
+            parameterInvalidResult = getParameterInvalidResult(me);
+        }
+
         if (CollectionUtils.isEmpty(parameterInvalidResult)){
             return Result.custom(ResultCode.VALIDATE_FAILED,e.getMessage());
         }
         return Result.custom(ResultCode.VALIDATE_FAILED,parameterInvalidResult);
     }
+
+
 
     private List<ParameterInvalidResult> getParameterInvalidResult(Exception e){
 
@@ -113,39 +124,6 @@ public class GlobalExceptionHandler {
             fieldErrorList = ((MethodArgumentNotValidException) e).getBindingResult().getFieldErrors();
         }
 
-//        fieldErrorList = Optional.ofNullable(fieldErrorList).orElse(new ArrayList<>());
-//        fieldErrorList.forEach(fieldError -> {
-//
-//        });
-
-//        for (int i = 0; i < fieldErrorList.size() - 1; i++) {
-//
-//        }
-
-
-//        Optional.ofNullable(fieldErrorList)
-//                .ifPresent(list -> {
-////                    ParameterInvalidResult parameterInvalidItem = new ParameterInvalidResult();
-////                    Set<String> fieldParam = new HashSet<>();
-////                    List<String> messages = new ArrayList<>();
-////                    list.forEach(fieldError -> {
-////                        if (fieldParam.contains(fieldError.getField())) {
-////                            messages.add(fieldError.getDefaultMessage());
-////                        }
-////                        fieldParam.add(fieldError.getField());
-//
-//
-//
-//
-////                        messages.add(fieldError.getDefaultMessage());
-////                        parameterInvalidItem.setFieldName(fieldError.getField());
-////                        parameterInvalidItem.setMessages(messages);
-////                        parameterInvalidItemList.add(parameterInvalidItem);
-////                    });
-//
-//
-//                });
-
         parameterInvalidItemList = Optional.ofNullable(fieldErrorList)
                 .map(fieldErrors -> fieldErrors.stream().map(fieldError -> {
 
@@ -155,18 +133,8 @@ public class GlobalExceptionHandler {
                     return parameterInvalidItem;
                 }).collect(Collectors.toList())).orElse(new ArrayList<>());
 
-//        if (CollectionUtils.isEmpty(parameterInvalidItemList)) {
-//            if (e instanceof ConstraintViolationException) {
-//                ConstraintViolationException cve = (ConstraintViolationException) e;
-//                Optional.ofNullable(cve.getConstraintViolations()).ifPresent(cvSet -> {
-//                    System.out.println("---------------------");
-//                    cvSet.stream().forEach(System.out::println);
-//                });
-//            }
-//        }
         return parameterInvalidItemList;
     }
-
 
 
 

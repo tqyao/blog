@@ -49,7 +49,7 @@ public class Result<T> {
      * @return
      */
     public static <T> Result<T> error(){
-        return result(ResultCode.SYSTEM_INNER_ERROR.getCode(),ResultCode.SYSTEM_INNER_ERROR.getMsg(),null);
+        return result(ResultCode.FAILED.getCode(),ResultCode.FAILED.getMsg(),null);
     }
 
     /**
