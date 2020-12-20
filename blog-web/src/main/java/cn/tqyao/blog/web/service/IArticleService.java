@@ -4,6 +4,7 @@ import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.web.dto.*;
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
+import cn.tqyao.blog.web.vo.TagArticleDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -46,5 +47,17 @@ public interface IArticleService extends IService<Article> {
 
     IPage<Article> personalArticleList(BasePageDTO dto);
 
+    /**
+     * 获取文章详情 (作者、文章、文章体、分类、标签)
+     * @param articleId
+     * @return
+     */
     ArticleDetailVO getDetail(String articleId);
+
+    /**
+     * 获取文章基本详情信息(作者、文章、分类、标签)
+     * @param articleIds
+     * @return
+     */
+    List<TagArticleDetailVO> getArticleBaseDetail(List<String> articleIds);
 }

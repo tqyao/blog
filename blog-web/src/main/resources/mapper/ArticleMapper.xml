@@ -1,30 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.tqyao.blog.web.mapper.ArticleMapper">
-    <resultMap id="ArticleDetailMap" type="cn.tqyao.blog.web.vo.ArticleDetailVO"
-               extends="cn.tqyao.blog.dao.ArticleDao.BaseResultMap">
-        <id column="id" jdbcType="VARCHAR" property="id" />
+<!--    <resultMap id="ArticleDetailMap" type="cn.tqyao.blog.web.vo.ArticleDetailVO"-->
+<!--               extends="cn.tqyao.blog.dao.ArticleDao.BaseResultMap">-->
+<!--        <id column="id" jdbcType="VARCHAR" property="id" />-->
+<!--        <association property="memberBaseVO" columnPrefix="member_" resultMap="cn.tqyao.blog.web.mapper.MemberMapper.MemberBaseMap" />-->
+<!--        <association property="articleBody" resultMap="cn.tqyao.blog.dao.ArticleBodyDao.BaseResultMap" />-->
+<!--        <collection property="tagList" columnPrefix="tag_" resultMap="cn.tqyao.blog.dao.ArticleTagDao.BaseResultMap"/>-->
+<!--        <collection property="categoryList" columnPrefix="category_" resultMap="cn.tqyao.blog.dao.ArticleCategoryDao.BaseResultMap"/>-->
+<!--    </resultMap>-->
+
+    <sql id="Article_Base_Columns">
+        ${article_alias}.id AS ${article_prefix}id,
+        ${article_alias}.create_time AS ${article_prefix}create_time,
+        ${article_alias}.update_time AS ${article_prefix}update_time,
+        ${article_alias}.deleted AS ${article_prefix}deleted,
+        ${article_alias}.body_id AS ${article_prefix}body_id,
+        ${article_alias}.author_id AS ${article_prefix}author_id,
+        ${article_alias}.title AS ${article_prefix}title,
+        ${article_alias}.summary AS ${article_prefix}summary,
+        ${article_alias}.view_count AS ${article_prefix}view_count,
+        ${article_alias}.like_count AS ${article_prefix}like_count,
+        ${article_alias}.comment_count AS ${article_prefix}comment_count,
+        ${article_alias}.collect_count AS ${article_prefix}collect_count,
+        ${article_alias}.weight AS ${article_prefix}weight,
+        ${article_alias}.draft AS ${article_prefix}draft,
+              ${member_alias}.id AS ${member_prefix}id,
+              ${member_alias}.nickname AS ${member_prefix}nickname,
+              ${member_alias}.avatar AS ${member_prefix}avatar,
+
+              ${tag_alias}.id AS ${tag_prefix}id,
+              ${tag_alias}.`name` AS ${tag_prefix}name,
+              ${tag_alias}.avatar AS ${tag_prefix}avatar,
+
+              ${category_alias}.id AS ${category_prefix}id,
+              ${category_alias}.`name` AS ${category_prefix}name,
+              ${category_alias}.avatar AS ${category_prefix}avatar
+    </sql>
+
+    <resultMap id="ArticleBaseResultMap" type="cn.tqyao.blog.web.vo.TagArticleDetailVO">
+        <result column="article_id" property="id" />
+        <result column="article_create_time" property="createTime" />
+        <result column="article_update_time" property="updateTime" />
+        <result column="article_deleted" property="deleted" />
+            <result column="article_body_id" property="bodyId" />
+            <result column="article_author_id" property="authorId" />
+            <result column="article_title" property="title" />
+            <result column="article_summary" property="summary" />
+            <result column="article_view_count" property="viewCount" />
+            <result column="article_like_count" property="likeCount" />
+            <result column="article_comment_count" property="commentCount" />
+            <result column="article_collect_count" property="collectCount" />
+            <result column="article_weight" property="weight" />
+            <result column="article_draft" property="draft" />
         <association property="memberBaseVO" columnPrefix="member_" resultMap="cn.tqyao.blog.web.mapper.MemberMapper.MemberBaseMap" />
-        <association property="articleBody" resultMap="cn.tqyao.blog.dao.ArticleBodyDao.BaseResultMap" />
         <collection property="tagList" columnPrefix="tag_" resultMap="cn.tqyao.blog.dao.ArticleTagDao.BaseResultMap"/>
         <collection property="categoryList" columnPrefix="category_" resultMap="cn.tqyao.blog.dao.ArticleCategoryDao.BaseResultMap"/>
     </resultMap>
 
-    <select id="getDetail" resultMap="ArticleDetailMap">
+    <resultMap id="ArticleDetailResultMap" type="cn.tqyao.blog.web.vo.ArticleDetailVO">
+        <result column="article_id" property="id" />
+        <result column="article_create_time" property="createTime" />
+        <result column="article_update_time" property="updateTime" />
+        <result column="article_deleted" property="deleted" />
+            <result column="article_body_id" property="bodyId" />
+            <result column="article_author_id" property="authorId" />
+            <result column="article_title" property="title" />
+            <result column="article_summary" property="summary" />
+            <result column="article_view_count" property="viewCount" />
+            <result column="article_like_count" property="likeCount" />
+            <result column="article_comment_count" property="commentCount" />
+            <result column="article_collect_count" property="collectCount" />
+            <result column="article_weight" property="weight" />
+            <result column="article_draft" property="draft" />
+        <association property="memberBaseVO" columnPrefix="member_" resultMap="cn.tqyao.blog.web.mapper.MemberMapper.MemberBaseMap" />
+        <association property="articleBody" columnPrefix="body_" resultMap="cn.tqyao.blog.dao.ArticleBodyDao.BaseResultMap" />
+        <collection property="tagList" columnPrefix="tag_" resultMap="cn.tqyao.blog.dao.ArticleTagDao.BaseResultMap"/>
+        <collection property="categoryList" columnPrefix="category_" resultMap="cn.tqyao.blog.dao.ArticleCategoryDao.BaseResultMap"/>
+    </resultMap>
+
+    <sql id="Article_Detail_Columns">
+        ${article_alias}.id AS ${article_prefix}id,
+        ${article_alias}.create_time AS ${article_prefix}create_time,
+        ${article_alias}.update_time AS ${article_prefix}update_time,
+        ${article_alias}.deleted AS ${article_prefix}deleted,
+        ${article_alias}.body_id AS ${article_prefix}body_id,
+        ${article_alias}.author_id AS ${article_prefix}author_id,
+        ${article_alias}.title AS ${article_prefix}title,
+        ${article_alias}.summary AS ${article_prefix}summary,
+        ${article_alias}.view_count AS ${article_prefix}view_count,
+        ${article_alias}.like_count AS ${article_prefix}like_count,
+        ${article_alias}.comment_count AS ${article_prefix}comment_count,
+        ${article_alias}.collect_count AS ${article_prefix}collect_count,
+        ${article_alias}.weight AS ${article_prefix}weight,
+        ${article_alias}.draft AS ${article_prefix}draft,
+              ${member_alias}.id AS ${member_prefix}id,
+              ${member_alias}.nickname AS ${member_prefix}nickname,
+              ${member_alias}.avatar AS ${member_prefix}avatar,
+
+              ${body_alias}.id AS ${body_prefix}id,
+              ${body_alias}.content AS ${body_prefix}content,
+              ${body_alias}.content_html AS ${body_prefix}content_html,
+
+              ${tag_alias}.id AS ${tag_prefix}id,
+              ${tag_alias}.`name` AS ${tag_prefix}name,
+              ${tag_alias}.avatar AS ${tag_prefix}avatar,
+
+              ${category_alias}.id AS ${category_prefix}id,
+              ${category_alias}.`name` AS ${category_prefix}name,
+              ${category_alias}.avatar AS ${category_prefix}avatar
+    </sql>
+
+    <select id="getDetail" resultMap="ArticleDetailResultMap">
             SELECT
-                a.*,
-                bm.id member_id,
-                bm.nickname member_nickname,
-                bm.avatar member_avatar,
-                ab.id body_id,
-                ab.content,
-                ab.content_html,
-                `at`.id tag_id,
-                `at`.`name` tag_name,
-                `at`.avatar tag_avatar,
-                ac.id category_id,
-                ac.name category_name,
-                ac.avatar category_avatar
+                <include refid="Article_Detail_Columns">
+                    <property name="article_alias" value="`a`"/>
+                    <property name="member_alias" value="`bm`"/>
+                    <property name="body_alias" value="`ab`"/>
+                    <property name="tag_alias" value="`at`"/>
+                    <property name="category_alias" value="`ac`"/>
+                    <property name="article_prefix" value="article_"/>
+                    <property name="member_prefix" value="member_"/>
+                    <property name="body_prefix" value="body_"/>
+                    <property name="tag_prefix" value="tag_"/>
+                    <property name="category_prefix" value="category_"/>
+                </include>
             FROM
                 (article `a`
                 INNER JOIN `b_member` `bm` ON a.author_id = bm.id
@@ -36,4 +136,56 @@
             WHERE
                 a.id = #{articleId}
     </select>
+
+    <select id="selectArticleBaseDetail" resultMap="ArticleBaseResultMap">
+        SELECT
+            <include refid="Article_Base_Columns">
+                <property name="article_alias" value="`a`"/>
+                <property name="member_alias" value="`bm`"/>
+                <property name="tag_alias" value="`at`"/>
+                <property name="category_alias" value="`ac`"/>
+                <property name="article_prefix" value="article_"/>
+                <property name="member_prefix" value="member_"/>
+                <property name="tag_prefix" value="tag_"/>
+                <property name="category_prefix" value="category_"/>
+            </include>
+        FROM
+            (article `a` INNER JOIN `b_member` `bm` ON a.author_id = bm.id)
+            LEFT JOIN article_tag_relation `atr` ON  atr.article_id = a.id
+            LEFT JOIN article_tag `at` ON at.id = atr.tag_id
+            LEFT JOIN article_category_relation `acr` ON acr.article_id = a.id
+            LEFT JOIN article_category `ac` ON ac.id = acr.category_id
+        WHERE
+            a.id IN
+            <foreach collection="articleIds" item="item" index="index" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+    </select>
+
+    <!--    <select id="getDetail" resultMap="ArticleDetailMap">-->
+<!--            SELECT-->
+<!--                a.*,-->
+<!--                bm.id member_id,-->
+<!--                bm.nickname member_nickname,-->
+<!--                bm.avatar member_avatar,-->
+<!--                ab.id body_id,-->
+<!--                ab.content,-->
+<!--                ab.content_html,-->
+<!--                `at`.id tag_id,-->
+<!--                `at`.`name` tag_name,-->
+<!--                `at`.avatar tag_avatar,-->
+<!--                ac.id category_id,-->
+<!--                ac.name category_name,-->
+<!--                ac.avatar category_avatar-->
+<!--            FROM-->
+<!--                (article `a`-->
+<!--                INNER JOIN `b_member` `bm` ON a.author_id = bm.id-->
+<!--                INNER JOIN article_body `ab` ON ab.id = a.body_id)-->
+<!--                LEFT JOIN article_tag_relation `atr` ON  atr.article_id = a.id-->
+<!--                LEFT JOIN article_tag `at` ON at.id = atr.tag_id-->
+<!--                LEFT JOIN article_category_relation `acr` ON acr.article_id = a.id-->
+<!--                LEFT JOIN article_category `ac` ON ac.id = acr.category_id-->
+<!--            WHERE-->
+<!--                a.id = #{articleId}-->
+<!--    </select>-->
 </mapper>

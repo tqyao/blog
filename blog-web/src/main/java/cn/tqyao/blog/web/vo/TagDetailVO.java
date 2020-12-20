@@ -1,12 +1,13 @@
 package cn.tqyao.blog.web.vo;
 
-import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.entity.ArticleTag;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
  * <p>
@@ -19,8 +20,10 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="ArticleTagDetailVO", description="文章-标签详细VO")
-public class ArticleTagDetailVO extends ArticleTag {
+@ApiModel(value="TagDetailVO", description="标签文章详细VO")
+public class TagDetailVO extends ArticleTag {
 
+    @ApiModelProperty(value = "含标签文章细节")
+    List<TagArticleDetailVO> tagArticleDetailVOList;
 
 }

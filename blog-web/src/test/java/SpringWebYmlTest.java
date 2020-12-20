@@ -4,14 +4,19 @@
 
 
 import cn.tqyao.blog.common.redis.RedisService;
+import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.entity.Member;
 import cn.tqyao.blog.web.BlogWebApplication;
 import cn.tqyao.blog.web.config.RedisProperties;
+import cn.tqyao.blog.web.mapper.ArticleMapper;
 import cn.tqyao.blog.web.service.IMemberCacheService;
 import cn.tqyao.blog.web.service.IMemberService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,22 +37,12 @@ import java.util.List;
 public class SpringWebYmlTest {
 
 
-//    @Autowired
-//    JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private RedisProperties redisProperties;
-
     @Value("${redis.database}")
     private String REDIS_DATABASE;
-
-    @Autowired
-    private RedisService redisService;
-
     @Value("${redis.blacklist}")
     private String blacklist;
-
     @Autowired
-    private IMemberCacheService memberCacheService;
+    private RedisService redisService;
 
     @Test
     public void printConfigs() {
@@ -59,20 +54,6 @@ public class SpringWebYmlTest {
 
     @Autowired
     private IMemberService memberService;
-    @Test
-    public void getTokenBody(){
-//        MemberServiceImpl memberService = (MemberServiceImpl) SpringUtil.getBean("memberServiceImpl");
-//
-//        String tokenBody = memberService.getTokenBody("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0cXkiLCJ0eXBlIjoiYWNjZXNzX3Rva2VuIiwiZXhwIjoxNjA2MzU5MzIwLCJpYXQiOjE2MDYzNTIxMjA3MTh9.4QyYS91UXk0YNSrafpwkH0vulJ9Yu8OSvVBdZnBiTA02f6wM9F8IM6NeewPOW-QRsjxOZSZM3GNCfmeHblCrrQ");
-//        System.out.println("tokenBody==" + tokenBody);
-//        System.out.println("-------------------------------");
-////        String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0cXkiLCJ0eXBlIjoiYWNjZXNzX3Rva2VuIiwiZXhwIjoxNjA2MzU5MzIwLCJpYXQiOjE2MDYzNTIxMjA3MTh9.4QyYS91UXk0YNSrafpwkH0vulJ9Yu8OSvVBdZnBiTA02f6wM9F8IM6NeewPOW-QRsjxOZSZM3GNCfmeHblCrrQ";
-////        System.out.println("memberService.getTokenBody(token)===" + memberService.getTokenBody(token));
-//        String tokenBody2 = memberService.getTokenBody("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0cXkiLCJ0eXBlIjoiYWNjZXNzX3Rva2VuIiwiZXhwIjoxNjA2MzU5MzIwLCJpYXQiOjE2MDYzNTIxMjA3MTh9.4QyYS91UXk0YNSrafpwkH0vulJ9Yu8OSvVBdZnBiTA02f6wM9F8IM6NeewPOW-QRsjxOZSZM3GNCfmeHblCrrQ");
-//        System.out.println("tokenBody2==" + tokenBody2);
-//        System.out.println();
-//        System.out.println("tokenBody === tokenBody2 ===>" + tokenBody.equals(tokenBody2));
-    }
 
     @Test
     public void testSecondLevelCache(){
@@ -85,6 +66,55 @@ public class SpringWebYmlTest {
         System.out.println(two == one);
     }
 
+
+
+    /**
+     * 测试mybatis缓存
+     */
+    @Autowired
+    private SqlSessionFactory factory;
+
+    @Test
+    public void showDefaultCacheConfiguration() {
+        System.out.println("本地缓存范围: " + factory.getConfiguration().getLocalCacheScope());
+        System.out.println("二级缓存是否被启用: " + factory.getConfiguration().isCacheEnabled());
+    }
+
+    /**
+     * 本地二级缓存
+     */
+    @Test
+    public void testMysqlTwoLevelCache(){
+
+        SqlSession sqlSession1 = factory.openSession(true);
+        SqlSession sqlSession2 = factory.openSession(true);
+
+        ArticleMapper mapper1 = sqlSession1.getMapper(ArticleMapper.class);
+        ArticleMapper mapper2 = sqlSession2.getMapper(ArticleMapper.class);
+
+        Article article1 = mapper1.selectById("1972adeb66db69cca706a2ce180dd4b4");
+        Article article2 = mapper2.selectById("1972adeb66db69cca706a2ce180dd4b4");
+
+        System.out.println(article1);
+        System.out.println(article2);
+
+        System.out.println("article1 == article2 => " + (article1 == article2));
+        System.out.println("article1.equals(article2) =>" + article1.equals(article2));
+
+        sqlSession1.close();
+        sqlSession2.close();
+    }
+
+    @Test
+    public void testMysqlOneLevelCache(){
+        SqlSession sqlSession = factory.openSession(true);
+        ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+
+        System.out.println(mapper.selectById("1972adeb66db69cca706a2ce180dd4b4"));
+        System.out.println(mapper.selectById("1972adeb66db69cca706a2ce180dd4b4"));
+        System.out.println(mapper.selectById("1972adeb66db69cca706a2ce180dd4b4"));
+        sqlSession.close();
+    }
 
 
 }

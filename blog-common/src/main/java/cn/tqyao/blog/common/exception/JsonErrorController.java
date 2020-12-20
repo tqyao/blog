@@ -18,7 +18,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 系统异常处理
+ * 系统异常处理(4xx、5xx)
  * .<br>
  *
  * @author tanqinyao<br>

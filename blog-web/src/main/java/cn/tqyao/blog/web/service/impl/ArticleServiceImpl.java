@@ -9,6 +9,7 @@ import cn.tqyao.blog.web.mapper.ArticleMapper;
 import cn.tqyao.blog.web.service.*;
 import cn.tqyao.blog.web.util.PageUtil;
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
+import cn.tqyao.blog.web.vo.TagArticleDetailVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -277,6 +278,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         insertArticle.setId(article.getId());
         updateById(insertArticle);
         return baseMapper.getDetail(articleId);
+    }
+
+    @Override
+    public List<TagArticleDetailVO> getArticleBaseDetail(List<String> articleIds) {
+        return baseMapper.selectArticleBaseDetail(articleIds);
     }
 
 

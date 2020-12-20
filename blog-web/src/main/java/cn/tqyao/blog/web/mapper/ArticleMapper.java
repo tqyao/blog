@@ -4,8 +4,12 @@ import cn.tqyao.blog.dao.ArticleDao;
 import cn.tqyao.blog.entity.Article;
 
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
+import cn.tqyao.blog.web.vo.TagArticleDetailVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -19,4 +23,6 @@ import org.springframework.stereotype.Repository;
 public interface ArticleMapper extends ArticleDao {
 
     ArticleDetailVO getDetail(String articleId);
+
+    List<TagArticleDetailVO> selectArticleBaseDetail(@Param("articleIds") List<String> articleIds);
 }

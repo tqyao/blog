@@ -6,13 +6,12 @@ import cn.tqyao.blog.common.result.Result;
 import cn.tqyao.blog.entity.ArticleTag;
 import cn.tqyao.blog.web.dto.ArticleTagDTO;
 import cn.tqyao.blog.web.service.IArticleTagService;
-import cn.tqyao.blog.web.vo.ArticleTagDetailVO;
+import cn.tqyao.blog.web.vo.TagDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * <p>
@@ -54,14 +53,11 @@ public class ArticleTagController {
         return Result.success(articleTagService.getById(tagId));
     }
 
-    //TODO 标签详情
-    @ApiIgnore
     @ApiOperation(value = "查看标签详情")
     @GetMapping("/detail/{tag-id}")
-    public Result<ArticleTagDetailVO> getDetail(@PathVariable("tag-id") String tagId) {
-        return Result.success(articleTagService.getDetailById(tagId));
+    public Result<TagDetailVO> getDetail(@PathVariable("tag-id") String tagId) {
+        return Result.success(articleTagService.getTagDetail(tagId));
     }
-
 
     @ApiOperation(value = "删除标签")
     @DeleteMapping("/{tag-id}")

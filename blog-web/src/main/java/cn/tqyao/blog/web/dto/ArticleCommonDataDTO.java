@@ -1,11 +1,13 @@
-package cn.tqyao.blog.entity;
+package cn.tqyao.blog.web.dto;
 
-import cn.tqyao.blog.base.BaseEntity;
+import cn.tqyao.blog.enums.ArticleCommonDataEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -16,21 +18,17 @@ import lombok.experimental.Accessors;
  * @since 2020-12-02
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="ArticleCommonData对象", description="文章点赞，收藏")
-public class ArticleCommonData extends BaseEntity {
+public class ArticleCommonDataDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(value = "用户ID")
-    private String memberId;
 
     @ApiModelProperty(value = "文章ID")
     private String articleId;
 
     @ApiModelProperty(value = "操作类型:0 -> 点赞；1 -> 收藏")
-    private Integer type;
-
+    private ArticleCommonDataEnum type;
 
 }

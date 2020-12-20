@@ -1,6 +1,7 @@
 package cn.tqyao.blog.web.service;
 
 import cn.tqyao.blog.entity.ArticleCommonData;
+import cn.tqyao.blog.web.dto.ArticleCommonDataDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IArticleCommonDataService extends IService<ArticleCommonData> {
 
+    Boolean addCommonData(ArticleCommonDataDTO dto);
+
+    Boolean cancleCommonData(ArticleCommonDataDTO dto);
 }

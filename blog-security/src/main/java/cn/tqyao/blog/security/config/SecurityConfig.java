@@ -54,15 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //静态资源 start
 
         web.ignoring().antMatchers("/**/error");
-
-
-        web.ignoring().antMatchers("/members/member/register");
-        web.ignoring().antMatchers("/article-tags/**");
-        web.ignoring().antMatchers("/article-categories/**");
-        web.ignoring().antMatchers("/articles/list");
-        web.ignoring().antMatchers("/articles//detail/*");
-        web.ignoring().antMatchers("/api/test/**");
-
     }
 
 
@@ -77,8 +68,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 关闭跨站请求防护及不使用session
         http.cors().and()
                 .csrf().disable().authorizeRequests()
-                .antMatchers("/members/member/refresh-token/**").permitAll()
-//                .antMatchers("/members/register","/members/logout").permitAll()
+                .antMatchers(
+                        "/members/member/refresh-token/**",
+                        "/members/member/register",
+                        "/article-categories/**",
+                        "/article-tags/**",
+                        "/articles/list",
+                        "/articles/detail/*").permitAll()
                 .and()
                 // 任何请求需要身份认证
                 .authorizeRequests()
@@ -91,11 +87,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling()
                 .authenticationEntryPoint(jsonAuthenticationEntryPoint());
 
-
         http.addFilterBefore(securityLoginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(securityAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        // 禁用 SESSION、JSESSIONID
-        //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
     }
 //
 //    /**
@@ -108,7 +102,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        auth.userDetailsService(userDetailsService())
 //                .passwordEncoder(passwordEncoder());
 //    }
-
 
 
     @Bean

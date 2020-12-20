@@ -23,6 +23,8 @@ import java.io.Serializable;
 @ApiModel(value="MemberBaseVO", description="用户基本信息VO")
 public class MemberBaseVO implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @ApiModelProperty(value = "用户ID")
     private String memberId;
 

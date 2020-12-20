@@ -3,12 +3,9 @@ package cn.tqyao.blog.web.service;
 import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.entity.ArticleTag;
 import cn.tqyao.blog.web.dto.ArticleTagDTO;
-import cn.tqyao.blog.web.vo.ArticleTagDetailVO;
+import cn.tqyao.blog.web.vo.TagDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
  * <p>
@@ -26,5 +23,5 @@ public interface IArticleTagService extends IService<ArticleTag> {
 
     IPage<ArticleTag> listTag(BasePageDTO pageDTO);
 
-    ArticleTagDetailVO getDetailById(String tagId);
+    TagDetailVO getTagDetail(String tagId);
 }

@@ -1,9 +1,10 @@
 package cn.tqyao.blog.web.mapper;
 
 import cn.tqyao.blog.dao.ArticleTagDao;
-import cn.tqyao.blog.entity.ArticleTag;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import cn.tqyao.blog.web.vo.TagDetailVO;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,4 +17,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArticleTagMapper extends ArticleTagDao {
 
+    List<TagDetailVO> getTagDetailById(String tagId);
 }
