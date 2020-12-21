@@ -2,7 +2,6 @@ package cn.tqyao.blog.web.service.impl;
 
 import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.common.exception.CommonException;
-import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.entity.ArticleTag;
 import cn.tqyao.blog.entity.ArticleTagRelation;
 import cn.tqyao.blog.web.dto.ArticleTagDTO;
@@ -11,7 +10,7 @@ import cn.tqyao.blog.web.service.IArticleService;
 import cn.tqyao.blog.web.service.IArticleTagRelationService;
 import cn.tqyao.blog.web.service.IArticleTagService;
 import cn.tqyao.blog.web.util.PageUtil;
-import cn.tqyao.blog.web.vo.TagArticleDetailVO;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
 import cn.tqyao.blog.web.vo.TagDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,13 +77,13 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
                 .map(rList -> rList.stream().map(ArticleTagRelation::getArticleId).collect(Collectors.toList()))
                 .orElse(new ArrayList<>());
 
-        List<TagArticleDetailVO> detailVOS = null;
+        List<ArticleBaseDetailVO> detailVOS = null;
         if (!CollectionUtils.isEmpty(articleIds)) {
             detailVOS = articleService.getArticleBaseDetail(articleIds);
         }
 
         BeanUtils.copyProperties(tag, vo);
-        vo.setTagArticleDetailVOList(detailVOS);
+        vo.setArticleBaseDetailVOList(detailVOS);
         return vo;
     }
 }

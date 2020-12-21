@@ -4,11 +4,9 @@ import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.web.dto.*;
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
-import cn.tqyao.blog.web.vo.TagArticleDetailVO;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -59,5 +57,5 @@ public interface IArticleService extends IService<Article> {
      * @param articleIds
      * @return
      */
-    List<TagArticleDetailVO> getArticleBaseDetail(List<String> articleIds);
+    List<ArticleBaseDetailVO> getArticleBaseDetail(List<String> articleIds);
 }

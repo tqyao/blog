@@ -40,6 +40,7 @@ public class ArticleCommonDataServiceImpl extends ServiceImpl<ArticleCommonDataM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean addCommonData(ArticleCommonDataDTO dto) {
+
         Member currentMember = memberService.getCurrentMember();
 
         Article article = Optional.ofNullable(articleService.getById(dto.getArticleId()))

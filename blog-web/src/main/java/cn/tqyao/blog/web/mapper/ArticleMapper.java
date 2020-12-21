@@ -1,11 +1,9 @@
 package cn.tqyao.blog.web.mapper;
 
 import cn.tqyao.blog.dao.ArticleDao;
-import cn.tqyao.blog.entity.Article;
 
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
-import cn.tqyao.blog.web.vo.TagArticleDetailVO;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -24,5 +22,5 @@ public interface ArticleMapper extends ArticleDao {
 
     ArticleDetailVO getDetail(String articleId);
 
-    List<TagArticleDetailVO> selectArticleBaseDetail(@Param("articleIds") List<String> articleIds);
+    List<ArticleBaseDetailVO> selectArticleBaseDetail(@Param("articleIds") List<String> articleIds);
 }

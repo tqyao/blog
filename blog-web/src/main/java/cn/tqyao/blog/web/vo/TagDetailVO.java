@@ -23,7 +23,7 @@ import java.util.List;
 @ApiModel(value="TagDetailVO", description="标签文章详细VO")
 public class TagDetailVO extends ArticleTag {
 
-    @ApiModelProperty(value = "含标签文章细节")
-    List<TagArticleDetailVO> tagArticleDetailVOList;
+    @ApiModelProperty(value = "含标签的文章细节")
+    List<ArticleBaseDetailVO> articleBaseDetailVOList;
 
 }

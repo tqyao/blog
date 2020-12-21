@@ -2,30 +2,22 @@ package cn.tqyao.blog.web.service.impl;
 
 import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.common.exception.CommonException;
-import cn.tqyao.blog.common.validated.group.UpdateValidated;
 import cn.tqyao.blog.entity.*;
 import cn.tqyao.blog.web.dto.*;
 import cn.tqyao.blog.web.mapper.ArticleMapper;
 import cn.tqyao.blog.web.service.*;
 import cn.tqyao.blog.web.util.PageUtil;
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
-import cn.tqyao.blog.web.vo.TagArticleDetailVO;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import javax.validation.constraints.NotBlank;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -281,7 +273,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public List<TagArticleDetailVO> getArticleBaseDetail(List<String> articleIds) {
+    public List<ArticleBaseDetailVO> getArticleBaseDetail(List<String> articleIds) {
         return baseMapper.selectArticleBaseDetail(articleIds);
     }
 

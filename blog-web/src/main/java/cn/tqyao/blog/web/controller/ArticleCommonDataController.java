@@ -41,4 +41,5 @@ public class ArticleCommonDataController {
         return Result.status(articleCommonDataService.cancleCommonData(dto));
     }
 
+//    public Result<>
 }
