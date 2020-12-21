@@ -1,7 +1,7 @@
 /**
  * Copyright 2020-2030 The author personally reserves all rights.
  */
-package cn.tqyao.blog.web.util;
+package cn.tqyao.blog.common.util;
 
 import cn.tqyao.blog.common.base.BasePageDTO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

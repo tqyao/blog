@@ -7,7 +7,7 @@ import cn.tqyao.blog.security.handle.JsonAuthenticationFailureHandler;
 import cn.tqyao.blog.security.handle.JsonLoginSuccessHandler;
 
 import cn.tqyao.blog.security.util.JwtTokenUtil;
-import cn.tqyao.blog.security.util.RedisUtil;
+import cn.tqyao.blog.security.util.RedisSecurityUtil;
 import cn.tqyao.blog.security.util.SecurityUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -74,7 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/article-categories/**",
                         "/article-tags/**",
                         "/articles/list",
-                        "/articles/detail/*").permitAll()
+                        "/articles/detail/*",
+                        "/api/files/file/upload*").permitAll()
                 .and()
                 // 任何请求需要身份认证
                 .authorizeRequests()
@@ -110,8 +111,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public RedisUtil redisUtil(){
-        return new RedisUtil();
+    public RedisSecurityUtil redisSecurityUtil(){
+        return new RedisSecurityUtil();
     }
     @Bean
     public JwtTokenUtil jwtTokenUtil(){

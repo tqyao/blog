@@ -1,4 +1,4 @@
-package cn.tqyao.blog.security.util;
+package cn.tqyao.blog.common.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

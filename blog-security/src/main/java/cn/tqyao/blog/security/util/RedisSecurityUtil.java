@@ -20,7 +20,7 @@ import java.util.Optional;
  * @version 1.0.0 <br>
  * @date Create in 2020/11/25 18:22 <br>
  */
-public class RedisUtil {
+public class RedisSecurityUtil {
 
 
     /**

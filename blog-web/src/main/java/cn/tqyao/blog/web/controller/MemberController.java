@@ -2,20 +2,14 @@ package cn.tqyao.blog.web.controller;
 
 
 import cn.tqyao.blog.common.result.Result;
-import cn.tqyao.blog.common.result.ResultCode;
 import cn.tqyao.blog.security.JwtAuthenticationToken;
-import cn.tqyao.blog.security.util.RedisUtil;
-import cn.tqyao.blog.security.util.SecurityUtil;
 import cn.tqyao.blog.web.dto.MemberRegisterDTO;
 import cn.tqyao.blog.web.service.IMemberService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
-import java.security.Principal;
 
 
 /**

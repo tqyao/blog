@@ -4,7 +4,7 @@ import cn.tqyao.blog.common.exception.CommonException;
 import cn.tqyao.blog.common.result.ResultCode;
 import cn.tqyao.blog.entity.Member;
 import cn.tqyao.blog.security.JwtAuthenticationToken;
-import cn.tqyao.blog.security.util.RedisUtil;
+import cn.tqyao.blog.security.util.RedisSecurityUtil;
 import cn.tqyao.blog.security.util.SecurityUtil;
 import cn.tqyao.blog.web.config.MemberDetails;
 import cn.tqyao.blog.web.dto.MemberRegisterDTO;
@@ -47,7 +47,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     @Value("${jwt.token-head}")
     private String tokenHead;
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisSecurityUtil redisSecurityUtil;
     @Autowired
     private SecurityUtil securityUtil;
     @Autowired
@@ -119,7 +119,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         Optional.ofNullable(getCurrentMember()).ifPresent(member -> memberCacheService.delMember(member.getId()));
         accessToken = getTokenBody(accessToken);
         refreshToken = getTokenBody(refreshToken);
-        redisUtil.addBlacklistSet(accessToken, refreshToken);
+        redisSecurityUtil.addBlacklistSet(accessToken, refreshToken);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         refreshToken = getTokenBody(refreshToken);
         JwtAuthenticationToken token = securityUtil.getRefreshToken(refreshToken);
         //旧token加入黑名单
-        redisUtil.addBlacklistSet(accessToken, refreshToken);
+        redisSecurityUtil.addBlacklistSet(accessToken, refreshToken);
         return token;
     }
 

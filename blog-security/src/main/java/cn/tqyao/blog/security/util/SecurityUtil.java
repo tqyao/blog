@@ -3,7 +3,6 @@
  */
 package cn.tqyao.blog.security.util;
 
-import cn.tqyao.blog.common.redis.RedisService;
 import cn.tqyao.blog.common.result.ResultCode;
 import cn.tqyao.blog.security.JwtAuthenticationToken;
 import cn.tqyao.blog.security.JwtTokenTypeEnum;
@@ -12,7 +11,6 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,8 +19,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 import static cn.tqyao.blog.security.JwtTokenTypeEnum.ACCESS_TOKEN;
 import static cn.tqyao.blog.security.JwtTokenTypeEnum.REFRESH_TOKEN;
@@ -38,7 +34,7 @@ import static cn.tqyao.blog.security.JwtTokenTypeEnum.REFRESH_TOKEN;
 public class SecurityUtil {
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisSecurityUtil redisSecurityUtil;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
@@ -144,7 +140,7 @@ public class SecurityUtil {
             }
 
             // 查询redis中是否存在该token
-            if (redisUtil.checkInBlacklistSet(token)) {
+            if (redisSecurityUtil.checkInBlacklistSet(token)) {
                 throw new TokenAuthenticationException(username, ResultCode.TOKEN_INVALIDATION_ERROR);
             }
 

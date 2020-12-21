@@ -117,6 +117,8 @@ public class SwaggerConfig  {
         result.add(getContextByPath("/members/member/.*"));
         result.add(getContextByPath("/articles/.*"));
         result.add(getContextByPath("/article-common-data/.*"));
+        result.add(getContextByPath("/api/file/upload"));
+
         return result;
     }
 
