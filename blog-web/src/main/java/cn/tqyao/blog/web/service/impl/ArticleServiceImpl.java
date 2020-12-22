@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -54,6 +55,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         articleBodyService.save(insertBody);
 
+        //TODO 查询文章分类是否存在
         //插入文章
         Article article = new Article();
         BeanUtils.copyProperties(dto, article);
@@ -80,17 +82,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                         }).collect(Collectors.toList()))
                 .ifPresent(list -> articleTagRelationService.saveBatch(list));
 
-        //添加文章类目关系
-        Optional.ofNullable(dto.getCategorySet())
-                .map(set -> set.stream()
-                        .map(categoryId -> {
-                            //TODO 查询文章分类是否存在
+//        //添加文章类目关系
+//        Optional.ofNullable(dto.getCategorySet())
+//                .map(set -> set.stream()
+//                        .map(categoryId -> {
+//                            //TODO 查询文章分类是否存在
+//
+//                            ArticleCategoryRelation articleCategoryRelation = new ArticleCategoryRelation();
+//                            articleCategoryRelation.setArticleId(articleId).setCategoryId(categoryId);
+//                            return articleCategoryRelation;
+//                        }).collect(Collectors.toList()))
+//                .ifPresent(list -> articleCategoryRelationService.saveBatch(list));
 
-                            ArticleCategoryRelation articleCategoryRelation = new ArticleCategoryRelation();
-                            articleCategoryRelation.setArticleId(articleId).setCategoryId(categoryId);
-                            return articleCategoryRelation;
-                        }).collect(Collectors.toList()))
-                .ifPresent(list -> articleCategoryRelationService.saveBatch(list));
         return true;
     }
 
@@ -174,6 +177,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return articleTagRelationService.removeByIds(relationList);
     }
 
+    @Deprecated
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean addCategoryForArticle(ArticleCategoryRelationDTO dto) {
@@ -191,6 +195,53 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             list.add(articleCategoryRelation);
         });
         return articleCategoryRelationService.saveBatch(list);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean addCategoryForArticle(String articleId, String categoryId) {
+        Article article = Optional.ofNullable(getById(articleId)).orElseThrow(() -> new CommonException("文章不存在"));
+
+        List<ArticleCategoryRelation> relationList = articleCategoryRelationService
+                .list(Wrappers.<ArticleCategoryRelation>lambdaQuery()
+                        .eq(ArticleCategoryRelation::getArticleId, article.getId()));
+
+        //删除不包含categoryId的文章分类关系
+        Optional.ofNullable(relationList)
+                .map(list -> list.stream()
+                        .map(ArticleCategoryRelation::getCategoryId)
+                        .filter(item -> !item.equals(categoryId))
+                        .collect(Collectors.toList()))
+                .ifPresent(item -> articleCategoryRelationService
+                        .remove(Wrappers.<ArticleCategoryRelation>lambdaQuery()
+                                .eq(ArticleCategoryRelation::getArticleId, articleId)
+                                .eq(ArticleCategoryRelation::getCategoryId, item)));
+
+        Optional.ofNullable(articleCategoryRelationService
+                .getOne(Wrappers.<ArticleCategoryRelation>lambdaQuery()
+                        .eq(ArticleCategoryRelation::getArticleId, articleId)
+                        .eq(ArticleCategoryRelation::getCategoryId, categoryId)))
+                .orElseGet(() -> {
+                    ArticleCategoryRelation articleCategoryRelation = new ArticleCategoryRelation();
+                    articleCategoryRelation.setArticleId(articleId).setCategoryId(categoryId);
+                    articleCategoryRelationService.save(articleCategoryRelation);
+                    return null;
+                });
+
+
+        //查询是该文章该分类文章关系，不报行则新增
+//        Optional.ofNullable(articleCategoryRelationService
+//                .list(Wrappers.<ArticleCategoryRelation>lambdaQuery()
+//                        .eq(ArticleCategoryRelation::getArticleId, article.getId())))
+//                .map(relations -> relations.stream()
+//                        .map(ArticleCategoryRelation::getId).collect(Collectors.toList()))
+//                .ifPresent(relations -> articleCategoryRelationService.removeByIds(relations));
+//
+//        ArticleCategoryRelation relation = new ArticleCategoryRelation();
+//        relation.setArticleId(article.getId());
+//        relation.setCategoryId(categoryId);
+//        return articleCategoryRelationService.save(relation);
+        return true;
     }
 
     @Override
@@ -231,9 +282,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
             Optional.ofNullable(articleCategoryRelationService.list(Wrappers.<ArticleCategoryRelation>lambdaQuery()
                     .eq(ArticleCategoryRelation::getArticleId, articleId)))
-                    .ifPresent(articleCategoryRelationList -> articleCategoryRelationList.forEach(relation -> {
-                        categoryList.add(relation.getCategoryId());
-                    }));
+                    .ifPresent(articleCategoryRelationList -> articleCategoryRelationList
+                            .forEach(relation -> {
+                                categoryList.add(relation.getCategoryId());
+                            }));
         });
 
         articleBodyService.removeByIds(bodyIdList);
@@ -266,7 +318,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Article article = Optional.ofNullable(getById(articleId)).orElseThrow(() -> new CommonException("文章不存在"));
         // 文章观看数+1
         Article insertArticle = new Article();
-        insertArticle.setViewCount(article.getViewCount()+1);
+        insertArticle.setViewCount(article.getViewCount() + 1);
         insertArticle.setId(article.getId());
         updateById(insertArticle);
         return baseMapper.getDetail(articleId);

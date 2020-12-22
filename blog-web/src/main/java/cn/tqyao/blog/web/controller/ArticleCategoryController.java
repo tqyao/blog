@@ -49,6 +49,7 @@ public class ArticleCategoryController {
         return Result.status(articleCategoryService.updateCategory(id, dto));
     }
 
+    //TODO：要判断该分类是否存在文章分类关系
     @ApiOperation(value = "删除分类")
     @DeleteMapping("/category/{id}")
     @ApiImplicitParam(value = "类目ID",
@@ -58,7 +59,7 @@ public class ArticleCategoryController {
             dataTypeClass = String.class,
             dataType = "String"
     )
-    public Result<Boolean> update(@PathVariable String id){
+    public Result<Boolean> remove(@PathVariable String id){
         return Result.status(articleCategoryService.removeById(id));
     }
 

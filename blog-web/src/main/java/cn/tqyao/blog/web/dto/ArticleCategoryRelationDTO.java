@@ -31,4 +31,6 @@ public class ArticleCategoryRelationDTO implements Serializable {
     @ApiModelProperty(value = "分类ID集合")
     private Set<String> categorySet;
 
+//    @ApiModelProperty(value = "分类ID")
+//    private String categoryId;
 }

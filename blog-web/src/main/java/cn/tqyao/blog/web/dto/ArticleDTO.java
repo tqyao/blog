@@ -49,7 +49,9 @@ public class ArticleDTO  implements Serializable {
     @ApiModelProperty(value = "文章标签")
     private Set<String> tagSet;
 
-    @ApiModelProperty(value = "文章分类")
-    private Set<String> categorySet;
+//    @ApiModelProperty(value = "文章分类")
+//    private Set<String> categorySet;
 
+    @ApiModelProperty(value = "文章分类ID")
+    private String categoryId;
 }

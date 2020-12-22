@@ -34,6 +34,7 @@ public class ArticleController {
     @Autowired
     private IArticleService articleService;
 
+    //TODO：分类改写
     @ApiOperation(value = "添加文章")
     @PostMapping("/article")
     public Result<Boolean> add(@RequestBody ArticleDTO dto) {
@@ -75,6 +76,7 @@ public class ArticleController {
         return Result.status(articleService.updateDraft(articleId, draft));
     }
 
+
     @ApiOperation(value = "为文章添加标签")
     @PostMapping("/tags")
     public Result<Boolean> addTagForArticle(@RequestBody ArticleTagRelationDTO dto){
@@ -87,18 +89,37 @@ public class ArticleController {
         return Result.status(articleService.deletedTagForArticle(dto));
     }
 
-    @ApiOperation(value = "为文章添加分类")
-    @PostMapping("/category")
-    public Result<Boolean> addCategoryForArticle(@RequestBody ArticleCategoryRelationDTO dto){
-        return Result.status(articleService.addCategoryForArticle(dto));
+//    //TODO：分类改写
+//    @ApiOperation(value = "为文章添加分类")
+//    @PostMapping("/category")
+//    public Result<Boolean> addCategoryForArticle(@RequestBody ArticleCategoryRelationDTO dto){
+//        return Result.status(articleService.addCategoryForArticle(dto));
+//    }
+
+    //TODO：分类改写
+    @ApiOperation(value = "为文章添加或修改分类",notes = "原文章有分类则替换")
+    @PostMapping("/category/{article-id}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "article-id", value = "文章ID",required = true,
+                    paramType = "path", dataType = "String", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "category-id", value = "分类ID",required = true,
+                    paramType = "query", dataType = "String", dataTypeClass = String.class)
+    })
+    public Result<Boolean> addCategoryForArticle(
+            @PathVariable("article-id") String articleId,
+            @RequestParam("category-id") String categoryId
+    ){
+        return Result.status(articleService.addCategoryForArticle(articleId, categoryId));
     }
 
+    //TODO：分类改写
     @ApiOperation(value = "删除文章分类")
     @DeleteMapping("/category")
     public Result<Boolean> deletedCategoryForArticle(@RequestBody ArticleCategoryRelationDTO dto){
         return Result.status(articleService.deletedCategoryForArticle(dto));
     }
 
+    //TODO：分类改写
     @ApiOperation(value = "删除文章")
     @DeleteMapping("/article")
     @ApiImplicitParam(name = "ids[]",
@@ -111,18 +132,19 @@ public class ArticleController {
         return Result.status(articleService.deletedArticle(ids));
     }
 
-    @ApiOperation(value = "首页文章列表",notes = "文章列表分页")
+    @ApiOperation(value = "文章列表",notes = "文章列表分页")
     @GetMapping("/list")
     public Result<IPage<Article>> list(BasePageDTO dto){
         return Result.success(articleService.homeList(dto));
     }
 
-    @ApiOperation(value = "获取个人主页文章信息", notes = "文章列表")
+    @ApiOperation(value = "个人文章信息", notes = "文章列表")
     @GetMapping("/personal-list")
     public Result<IPage<Article>> personalArticleList(BasePageDTO dto){
         return Result.success(articleService.personalArticleList(dto));
     }
 
+    //TODO：分类改写
     @ApiOperation(value = "获取文章详细", notes = "文章body、分类、标签")
     @GetMapping("/detail/{id}")
     @ApiImplicitParam(name = "id",

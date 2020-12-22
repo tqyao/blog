@@ -37,6 +37,8 @@ public interface IArticleService extends IService<Article> {
 
     Boolean addCategoryForArticle(ArticleCategoryRelationDTO dto);
 
+    Boolean addCategoryForArticle(String articleId, String categoryId);
+
     Boolean deletedCategoryForArticle(ArticleCategoryRelationDTO dto);
 
     Boolean deletedArticle(List<String> ids);
@@ -58,4 +60,6 @@ public interface IArticleService extends IService<Article> {
      * @return
      */
     List<ArticleBaseDetailVO> getArticleBaseDetail(List<String> articleIds);
+
+
 }
