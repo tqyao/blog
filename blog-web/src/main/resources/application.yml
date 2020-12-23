@@ -78,9 +78,19 @@ swagger:
   try-host: http://localhost:${server.port}
 
 ## aliyun oss
-oss:
-  endpoint: oss-cn-shenzhen.aliyuncs.com
-  url: https://b-blog-bucket.oss-cn-hangzhou.aliyuncs.com
-  accessKeyId: LTAI4G65bskd8cY3JtiBZewp
-  accessKeySecret: p2m0sqfz4mHZ4TbsijEbT3X8Uijbn0
-  bucketName: b-blog-bucket
+aliyun:
+ access-id: LTAI4G65bskd8cY3JtiBZewp
+ access-secret: p2m0sqfz4mHZ4TbsijEbT3X8Uijbn0
+ oss:
+   endpoint: oss-cn-shenzhen.aliyuncs.com
+   url: https://b-blog-bucket.oss-cn-hangzhou.aliyuncs.com
+   accessKeyId: ${aliyun.access-id}
+   accessKeySecret: ${aliyun.access-secret}
+   bucketName: b-blog-bucket
+ dayu-sms:
+   product: Dysmsapi
+   domain: dysmsapi.aliyuncs.com
+   accessKeyId: ${aliyun.access-id}
+   accessKeySecret: ${aliyun.access-secret}
+   template-code: SMS_207745853
+   sign-name: yaoyao博客猿

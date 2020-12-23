@@ -5,6 +5,7 @@ package cn.tqyao.blog.common.util.oss;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,35 +17,36 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
+@ConfigurationProperties(prefix = "aliyun.oss")
 public class AliyunOSSProperties {
 
     /**
      * 阿里云 oss 站点
      */
-    @Value("${oss.endpoint}")
+//    @Value("${oss.endpoint}")
     private String endpoint;
 
     /**
      * 阿里云 oss 资源访问 url
      */
-    @Value("${oss.url}")
+//    @Value("${oss.url}")
     private String url;
 
     /**
      * 阿里云 oss 公钥
      */
-    @Value("${oss.accessKeyId}")
+//    @Value("${oss.accessKeyId}")
     private String accessKeyId;
 
     /**
      * 阿里云 oss 私钥
      */
-    @Value("${oss.accessKeySecret}")
+//    @Value("${oss.accessKeySecret}")
     private String accessKeySecret;
 
     /**
      * 阿里云 oss 文件根目录
      */
-    @Value("${oss.bucketName}")
+//    @Value("${oss.bucketName}")
     private String bucketName;
 }

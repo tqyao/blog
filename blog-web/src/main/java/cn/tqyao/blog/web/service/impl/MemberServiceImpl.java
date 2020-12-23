@@ -1,7 +1,9 @@
 package cn.tqyao.blog.web.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.tqyao.blog.common.exception.CommonException;
 import cn.tqyao.blog.common.result.ResultCode;
+import cn.tqyao.blog.common.util.sms.AliyunSmsSendProperties;
 import cn.tqyao.blog.entity.Member;
 import cn.tqyao.blog.security.JwtAuthenticationToken;
 import cn.tqyao.blog.security.util.RedisSecurityUtil;
@@ -40,6 +42,7 @@ import java.util.Optional;
 @Service
 public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> implements IMemberService {
 
+    private static final Integer CODE_LEN = 6;
 
     /**
      * Bearer
@@ -47,12 +50,13 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     @Value("${jwt.token-head}")
     private String tokenHead;
     @Autowired
+    private AliyunSmsSendProperties smsSendProperties;
+    @Autowired
     private RedisSecurityUtil redisSecurityUtil;
     @Autowired
     private SecurityUtil securityUtil;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private IMemberCacheService memberCacheService;
 
@@ -133,6 +137,11 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         return token;
     }
 
+    @Override
+    public String sendSms(String telephone) {
+        return null;
+    }
+
     /**
      * 获取token体
      *
@@ -143,6 +152,19 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         return Optional.ofNullable(token.indexOf(" "))
                 .filter(index -> index >= 0)
                 .map(i -> token.substring(i + 1)).orElse(token);
+    }
+
+    /**
+     * 获得随机的code
+     *
+     * @return
+     */
+    private String getCode() {
+        StringBuilder code = new StringBuilder();
+        for (int i = 0; i < CODE_LEN; i++) {
+            code.append(RandomUtil.randomInt(0, 9));
+        }
+        return code.toString();
     }
 
 

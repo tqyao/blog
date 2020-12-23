@@ -45,4 +45,6 @@ public interface IMemberService extends IService<Member> {
     void logout(String accessToken,String refreshToken);
 
     JwtAuthenticationToken refreshToken(String accessToken, String refreshToken);
+
+    String sendSms(String telephone);
 }

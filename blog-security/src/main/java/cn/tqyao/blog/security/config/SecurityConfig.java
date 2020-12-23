@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/article-tags/**",
                         "/articles/list",
                         "/articles/detail/*",
-                        "/api/files/file/upload*").permitAll()
+                        "/api/files/**").permitAll()
                 .and()
                 // 任何请求需要身份认证
                 .authorizeRequests()

@@ -77,4 +77,13 @@ public class MemberController {
         return Result.success("刷新成功！",memberService.refreshToken(accessToken, refreshToken));
     }
 
+    @ApiOperation(value = "获取验证码")
+    @GetMapping("/member/code")
+    @ApiImplicitParam(name = "telephone", value = "手机号", required = true,
+            paramType = "query", dataType = "String", dataTypeClass = String.class)
+    public Result getAuthCode(@RequestParam("telephone") String telephone){
+        return Result.success(memberService.sendSms(telephone));
+    }
+
+
 }

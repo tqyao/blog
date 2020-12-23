@@ -33,7 +33,7 @@ public class OSSController {
     private IOSSService iossService;
 
     @ApiOperation(value = "文件上传")
-    @PostMapping(value = "/file/upload")
+    @PostMapping(value = "/file/upload", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     @ApiImplicitParam(name = "file", value = "文件", paramType = "form",
             dataType = "MultipartFile", dataTypeClass = MultipartFile.class)
     public Result<String> upLoad(@RequestParam("file") MultipartFile file){

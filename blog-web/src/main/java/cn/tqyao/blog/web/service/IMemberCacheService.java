@@ -28,5 +28,14 @@ public interface IMemberCacheService {
      */
     void setMember(Member member);
 
+    /**
+     * 设置验证码
+     */
+    void setAuthCode(String telephone, String authCode);
+
+    /**
+     * 获取验证码
+     */
+    String getAuthCode(String telephone);
 
 }
