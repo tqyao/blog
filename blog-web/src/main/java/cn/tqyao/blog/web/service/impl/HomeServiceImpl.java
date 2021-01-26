@@ -27,7 +27,9 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public HomeVO getHomeContent() {
+        HomeVO homeVO = new HomeVO();
 
+//        homeVO.setArticleList()
         return null;
     }
 }

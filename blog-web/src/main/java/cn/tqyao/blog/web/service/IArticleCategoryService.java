@@ -23,6 +23,6 @@ public interface IArticleCategoryService extends IService<ArticleCategory> {
 
     IPage<ArticleCategory> listCategory(BasePageDTO dto);
 
-    CategoryArticleDetailVO getCategoryArticleDetail(String categoryId);
+    CategoryArticleDetailVO getCategoryArticleDetail(BasePageDTO dto, String categoryId);
 
 }

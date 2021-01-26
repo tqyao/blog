@@ -32,7 +32,7 @@ public class HomeVO implements Serializable {
 
     private Member member;
 
-    private List<Article> articleList;
+    private List<ArticleBaseDetailVO> articleList;
 
     private List<ArticleTag> hotTagList;
 

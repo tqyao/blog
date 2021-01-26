@@ -82,8 +82,8 @@ public class ArticleCategoryController {
     @GetMapping("/category/detail/{id}")
     @ApiImplicitParam(name = "id", value = "类目ID", required = true, paramType = "path",
             dataType = "String", dataTypeClass = String.class)
-    public Result<CategoryArticleDetailVO> getDetail(@PathVariable("id") String categoryId){
-        return Result.success(articleCategoryService.getCategoryArticleDetail(categoryId));
+    public Result<CategoryArticleDetailVO> getDetail(BasePageDTO dto, @PathVariable("id") String categoryId){
+        return Result.success(articleCategoryService.getCategoryArticleDetail(dto, categoryId));
     }
 
 }

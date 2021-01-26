@@ -162,6 +162,34 @@
             </foreach>
     </select>
 
+    <select id="selectArticleBaseDetailConditionPage" resultMap="ArticleBaseResultMap">
+        SELECT
+        <include refid="Article_Base_Columns">
+            <property name="article_alias" value="`a`"/>
+            <property name="member_alias" value="`bm`"/>
+            <property name="tag_alias" value="`at`"/>
+            <property name="category_alias" value="`ac`"/>
+            <property name="article_prefix" value="article_"/>
+            <property name="member_prefix" value="member_"/>
+            <property name="tag_prefix" value="tag_"/>
+            <property name="category_prefix" value="category_"/>
+        </include>
+        FROM
+            (article `a` INNER JOIN `b_member` `bm` ON a.author_id = bm.id)
+            LEFT JOIN article_tag_relation `atr` ON  atr.article_id = a.id
+            LEFT JOIN article_tag `at` ON at.id = atr.tag_id
+            LEFT JOIN article_category_relation `acr` ON acr.article_id = a.id
+            LEFT JOIN article_category `ac` ON ac.id = acr.category_id
+        <where>
+            <if test="condition.memberId != null">
+                bm.id = #{condition.memberId}
+            </if>
+        </where>
+        ORDER BY a.create_time
+    </select>
+
+
+
     <!--    <select id="getDetail" resultMap="ArticleDetailMap">-->
 <!--            SELECT-->
 <!--                a.*,-->

@@ -14,6 +14,7 @@ import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
 import cn.tqyao.blog.web.vo.CategoryArticleDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,18 +65,25 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
     }
 
     @Override
-    public CategoryArticleDetailVO getCategoryArticleDetail(String categoryId) {
+    public CategoryArticleDetailVO getCategoryArticleDetail(BasePageDTO dto, String categoryId) {
         CategoryArticleDetailVO vo = new CategoryArticleDetailVO();
 
         ArticleCategory category = Optional.ofNullable(getById(categoryId)).orElseThrow(() -> new CommonException("分类不存在"));
         BeanUtils.copyProperties(category, vo);
 
-        List<ArticleBaseDetailVO> baseVOList = Optional.ofNullable(articleCategoryRelationService
+//        List<ArticleBaseDetailVO> baseVOList = Optional.ofNullable(articleCategoryRelationService
+//                .list(Wrappers.<ArticleCategoryRelation>lambdaQuery()
+//                        .eq(ArticleCategoryRelation::getCategoryId, category.getId())))
+//                .map(relations -> relations.stream()
+//                        .map(ArticleCategoryRelation::getArticleId).collect(Collectors.toList()))
+//                .map(articleIds -> articleService.getArticleBaseDetail(articleIds)).orElse(new ArrayList<>());
+
+        IPage<ArticleBaseDetailVO> baseVOList = Optional.ofNullable(articleCategoryRelationService
                 .list(Wrappers.<ArticleCategoryRelation>lambdaQuery()
                         .eq(ArticleCategoryRelation::getCategoryId, category.getId())))
                 .map(relations -> relations.stream()
                         .map(ArticleCategoryRelation::getArticleId).collect(Collectors.toList()))
-                .map(articleIds -> articleService.getArticleBaseDetail(articleIds)).orElse(new ArrayList<>());
+                .map(articleIds -> articleService.getArticleBaseDetail(dto,articleIds)).orElse(new Page<>());
 
         vo.setArticleBaseDetailVOList(baseVOList);
 

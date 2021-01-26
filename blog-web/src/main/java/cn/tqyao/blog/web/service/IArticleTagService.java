@@ -23,5 +23,5 @@ public interface IArticleTagService extends IService<ArticleTag> {
 
     IPage<ArticleTag> listTag(BasePageDTO pageDTO);
 
-    TagDetailVO getTagDetail(String tagId);
+    TagDetailVO getTagDetail(String tagId, BasePageDTO dto);
 }

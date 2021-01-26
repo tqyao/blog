@@ -17,7 +17,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -301,6 +300,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return page(page, Wrappers.<Article>lambdaQuery().orderByDesc(Article::getCreateTime));
     }
 
+//    @Override
+//    public IPage<ArticleBaseDetailVO> homeList(BasePageDTO dto) {
+//        Page<Article> page = PageUtil.getPage(dto);
+//        ArticleBaseDetailConditionDTO condition = new ArticleBaseDetailConditionDTO();
+//        return baseMapper.selectArticleBaseDetailConditionPage(page, condition);
+//    }
+
     @Override
     public IPage<Article> personalArticleList(BasePageDTO dto) {
         Page<Article> page = PageUtil.getPage(dto);
@@ -324,10 +330,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return baseMapper.getDetail(articleId);
     }
 
+//    @Override
+//    public List<ArticleBaseDetailVO> getArticleBaseDetail(List<String> articleIds) {
+//        return baseMapper.selectArticleBaseDetail(articleIds);
+//    }
+
     @Override
-    public List<ArticleBaseDetailVO> getArticleBaseDetail(List<String> articleIds) {
-        return baseMapper.selectArticleBaseDetail(articleIds);
+    public IPage<ArticleBaseDetailVO> getArticleBaseDetail(BasePageDTO dto, List<String> articleIds) {
+        return baseMapper.selectArticleBaseDetail(PageUtil.getPage(dto),articleIds);
     }
+
+//    @Override
+//    public IPage<Article> selectArticlePage(BasePageDTO dto, List<String> articleIds) {
+//        return baseMapper.selectArticlePage(PageUtil.getPage(dto), articleIds);
+//    }
 
 
 }

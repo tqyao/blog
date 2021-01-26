@@ -6,7 +6,9 @@ import cn.tqyao.blog.web.dto.*;
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
 import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -54,12 +56,18 @@ public interface IArticleService extends IService<Article> {
      */
     ArticleDetailVO getDetail(String articleId);
 
+//    /**
+//     * 获取文章基本详情信息(作者、文章、分类、标签)
+//     * @param articleIds
+//     * @return
+//     */
+//    List<ArticleBaseDetailVO> getArticleBaseDetail(List<String> articleIds);
     /**
      * 获取文章基本详情信息(作者、文章、分类、标签)
      * @param articleIds
      * @return
      */
-    List<ArticleBaseDetailVO> getArticleBaseDetail(List<String> articleIds);
+    IPage<ArticleBaseDetailVO> getArticleBaseDetail(BasePageDTO dto, List<String> articleIds);
 
-
+//    IPage<Article> selectArticlePage(BasePageDTO dto, List<String> articleIds);
 }

@@ -3,6 +3,7 @@ package cn.tqyao.blog.web.service.impl;
 import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.common.exception.CommonException;
 import cn.tqyao.blog.common.util.PageUtil;
+import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.entity.ArticleTag;
 import cn.tqyao.blog.entity.ArticleTagRelation;
 import cn.tqyao.blog.web.dto.ArticleTagDTO;
@@ -67,7 +68,7 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public TagDetailVO getTagDetail(String tagId) {
+    public TagDetailVO getTagDetail(String tagId, BasePageDTO dto) {
         TagDetailVO vo = new TagDetailVO();
 
         ArticleTag tag = Optional.ofNullable(getById(tagId)).orElseThrow(() -> new CommonException("标签不存在"));
@@ -78,13 +79,30 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
                 .map(rList -> rList.stream().map(ArticleTagRelation::getArticleId).collect(Collectors.toList()))
                 .orElse(new ArrayList<>());
 
-        List<ArticleBaseDetailVO> detailVOS = null;
+////        List<ArticleBaseDetailVO> detailVOS = null;
+//        IPage<ArticleBaseDetailVO> pageVO = null;
+//        if (!CollectionUtils.isEmpty(articleIds)) {
+////            detailVOS = articleService.getArticleBaseDetail(articleIds);
+//            pageVO = articleService.getArticleBaseDetail(articleIds);
+//        }
+//
+//        BeanUtils.copyProperties(tag, vo);
+////        vo.setArticleBaseDetailVOList(detailVOS);
+
+//        IPage<ArticleBaseDetailVO> pageVO = null;
+//        if (!CollectionUtils.isEmpty(articleIds)) {
+//            pageVO = articleService.getArticleBaseDetail(dto,articleIds);
+//        }
+
+
+        IPage<Article> articleIPage = null;
         if (!CollectionUtils.isEmpty(articleIds)) {
-            detailVOS = articleService.getArticleBaseDetail(articleIds);
+            articleIPage = articleService.page(PageUtil.getPage(dto), Wrappers.<Article>lambdaQuery()
+                    .in(Article::getId, articleIds));
         }
 
         BeanUtils.copyProperties(tag, vo);
-        vo.setArticleBaseDetailVOList(detailVOS);
+        vo.setArticlePage(articleIPage);
         return vo;
     }
 }
