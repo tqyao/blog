@@ -31,7 +31,7 @@
         <resource.delimiter>#</resource.delimiter>
         <java.version>1.8</java.version>
         <mysql-connector.version>8.0.15</mysql-connector.version>
-        <mybatis-generator.version>3.2.0</mybatis-generator.version>
+        <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
         <fastjson.version>1.2.66</fastjson.version>
         <hutool.version>4.5.9</hutool.version>
         <mybatis-plus.version>3.3.0</mybatis-plus.version>
@@ -102,7 +102,7 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
-                <version>${mybatis-plus.version}</version>
+                <version>${mybatis-plus-generator.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.freemarker</groupId>

@@ -6,9 +6,9 @@ import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
 
 public class GeberatorUIServer {
     public static void main(String[] args) {
-        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.1.211:3306/example")
+        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://47.112.114.47:3306/blog")
                 .userName("root")
-                .password("root")
+                .password("790461387")
                 .driverClassName("com.mysql.cj.jdbc.Driver")
                 //数据库schema，POSTGRE_SQL,ORACLE,DB2类型的数据库需要指定
                 .schemaName("myBusiness")
