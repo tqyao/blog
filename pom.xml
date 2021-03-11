@@ -16,6 +16,7 @@
         <module>blog-repository</module>
         <module>blog-security</module>
         <module>blog-web</module>
+        <module>blog-ui</module>
     </modules>
 
     <!-- parent指明继承关系，给出被继承的父项目的具体信息-->
@@ -45,6 +46,7 @@
         <aliyun.oss.version>3.10.2</aliyun.oss.version>
         <aliyun-java-sdk-core.version>4.0.6</aliyun-java-sdk-core.version>
         <aliyun-java-sdk-dysmsapi.version>1.1.0</aliyun-java-sdk-dysmsapi.version>
+        <mybatis-plus-generator-ui.version>1.4.2</mybatis-plus-generator-ui.version>
     </properties>
 
     <dependencies>
@@ -159,6 +161,13 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
                 <version>${aliyun-java-sdk-dysmsapi.version}</version>
+            </dependency>
+
+            <!-- mybatis-plus-generator-ui-->
+            <dependency>
+                <groupId>com.github.davidfantasy</groupId>
+                <artifactId>mybatis-plus-generator-ui</artifactId>
+                <version>${mybatis-plus-generator-ui.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
