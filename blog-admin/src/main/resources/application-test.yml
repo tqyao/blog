@@ -1,0 +1,23 @@
+mysql:
+  database: blog
+  user: blog
+  password: 790461387
+  url: 47.112.114.47
+  port: 3306
+#redis配置
+redis:
+  host: 47.112.114.47
+  port: 6379
+  password: 790461387
+  database: 0
+  timeout: 30s
+swagger:
+  enable: true
+logging:
+  file:
+    path: ./logs
+
+# 配置slq打印日志
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
