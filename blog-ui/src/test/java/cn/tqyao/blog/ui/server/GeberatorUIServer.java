@@ -34,6 +34,11 @@ public class GeberatorUIServer {
                         return StrUtil.upperFirst(StrUtil.toCamelCase(tableName.toLowerCase()));
                     }
 
+                    @Override
+                    public String mapperNameConvert(String tableName) {
+                        return this.entityNameConvert(tableName) + "Dao";
+                    }
+
                     /**
                      * 自定义Service类文件的名称规则
                      */

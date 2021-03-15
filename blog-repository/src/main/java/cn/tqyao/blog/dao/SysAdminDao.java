@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
  * @since 2021-03-15
  */
 @Repository
-public interface SysAdminMapper extends BaseMapper<SysAdmin> {
+public interface SysAdminDao extends BaseMapper<SysAdmin> {
 
 }
