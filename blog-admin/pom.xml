@@ -19,10 +19,10 @@
             <groupId>cn.tqyao.blog</groupId>
             <artifactId>blog-repository</artifactId>
         </dependency>
-        <dependency>
-            <groupId>cn.tqyao.blog</groupId>
-            <artifactId>blog-security</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cn.tqyao.blog</groupId>-->
+<!--            <artifactId>blog-security</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>

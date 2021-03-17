@@ -3,7 +3,13 @@
  */
 package cn.tqyao.blog.admin.controller;
 
+import cn.tqyao.blog.admin.mapper.SysAdminMapper;
+import cn.tqyao.blog.common.result.Result;
+import cn.tqyao.blog.entity.SysAdmin;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -15,8 +21,21 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/admins")
+@RequestMapping("/test-admins")
 public class TestAdminController {
 
+    @Autowired
+    private SysAdminMapper sysAdminMapper;
 
+    @GetMapping("/test")
+    public Result adminControllerTest(@RequestParam String str){
+        System.out.println (str);
+        SysAdmin admin = new SysAdmin ();
+        admin
+                .setUsername (str)
+                .setPassword ("123");
+
+        sysAdminMapper.insert (admin);
+        return Result.success (str);
+    }
 }

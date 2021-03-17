@@ -1,5 +1,6 @@
-package cn.tqyao.blog.dao;
+package cn.tqyao.blog.admin.mapper;
 
+import cn.tqyao.blog.dao.SysRoleDao;
 import cn.tqyao.blog.entity.SysRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,6 @@ import org.springframework.stereotype.Repository;
  * @since 2021-03-15
  */
 @Repository
-public interface SysRoleDao extends BaseMapper<SysRole> {
+public interface SysRoleMapper extends SysRoleDao {
 
 }

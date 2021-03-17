@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
 /**
  * <p>
  * 后台管理-用户表
@@ -16,6 +18,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 @TableName("sys_admin")
 @ApiModel(value="SysAdmin对象", description="后台管理-用户表")
 public class SysAdmin extends BaseEntity{
