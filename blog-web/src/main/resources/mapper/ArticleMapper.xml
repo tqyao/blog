@@ -10,6 +10,30 @@
 <!--        <collection property="categoryList" columnPrefix="category_" resultMap="cn.tqyao.blog.dao.ArticleCategoryDao.BaseResultMap"/>-->
 <!--    </resultMap>-->
 
+    <sql id="Article_Base_Columns2">
+        ${article_alias}.id AS ${article_prefix}id,
+        ${article_alias}.create_time AS ${article_prefix}create_time,
+        ${article_alias}.update_time AS ${article_prefix}update_time,
+        ${article_alias}.deleted AS ${article_prefix}deleted,
+        ${article_alias}.body_id AS ${article_prefix}body_id,
+        ${article_alias}.author_id AS ${article_prefix}author_id,
+        ${article_alias}.title AS ${article_prefix}title,
+        ${article_alias}.summary AS ${article_prefix}summary,
+        ${article_alias}.view_count AS ${article_prefix}view_count,
+        ${article_alias}.like_count AS ${article_prefix}like_count,
+        ${article_alias}.comment_count AS ${article_prefix}comment_count,
+        ${article_alias}.collect_count AS ${article_prefix}collect_count,
+        ${article_alias}.weight AS ${article_prefix}weight,
+        ${article_alias}.draft AS ${article_prefix}draft,
+        ${member_alias}.id AS ${member_prefix}id,
+        ${member_alias}.nickname AS ${member_prefix}nickname,
+        ${member_alias}.avatar AS ${member_prefix}avatar,
+
+        ${tag_alias}.id AS ${tag_prefix}id,
+        ${tag_alias}.`name` AS ${tag_prefix}name,
+        ${tag_alias}.avatar AS ${tag_prefix}avatar,
+    </sql>
+
     <sql id="Article_Base_Columns">
         ${article_alias}.id AS ${article_prefix}id,
         ${article_alias}.create_time AS ${article_prefix}create_time,
@@ -56,6 +80,25 @@
         <association property="memberBaseVO" columnPrefix="member_" resultMap="cn.tqyao.blog.web.mapper.MemberMapper.MemberBaseMap" />
         <collection property="tagList" columnPrefix="tag_" resultMap="cn.tqyao.blog.dao.ArticleTagDao.BaseResultMap"/>
         <collection property="categoryList" columnPrefix="category_" resultMap="cn.tqyao.blog.dao.ArticleCategoryDao.BaseResultMap"/>
+    </resultMap>
+
+    <resultMap id="ArticleBaseResultMap2" type="cn.tqyao.blog.web.vo.ArticleBaseDetailVO2">
+        <result column="article_id" property="id" />
+        <result column="article_create_time" property="createTime" />
+        <result column="article_update_time" property="updateTime" />
+        <result column="article_deleted" property="deleted" />
+            <result column="article_body_id" property="bodyId" />
+            <result column="article_author_id" property="authorId" />
+            <result column="article_title" property="title" />
+            <result column="article_summary" property="summary" />
+            <result column="article_view_count" property="viewCount" />
+            <result column="article_like_count" property="likeCount" />
+            <result column="article_comment_count" property="commentCount" />
+            <result column="article_collect_count" property="collectCount" />
+            <result column="article_weight" property="weight" />
+            <result column="article_draft" property="draft" />
+        <association property="memberBaseVO" columnPrefix="member_" resultMap="cn.tqyao.blog.web.mapper.MemberMapper.MemberBaseMap" />
+        <collection property="tagList" columnPrefix="tag_" resultMap="cn.tqyao.blog.dao.ArticleTagDao.BaseResultMap"/>
     </resultMap>
 
     <resultMap id="ArticleDetailResultMap" type="cn.tqyao.blog.web.vo.ArticleDetailVO">
@@ -155,6 +198,27 @@
             LEFT JOIN article_tag `at` ON at.id = atr.tag_id
             LEFT JOIN article_category_relation `acr` ON acr.article_id = a.id
             LEFT JOIN article_category `ac` ON ac.id = acr.category_id
+        WHERE
+            a.id IN
+            <foreach collection="articleIds" item="item" index="index" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+    </select>
+
+    <select id="selectArticleBaseDetail2" resultMap="ArticleBaseResultMap2">
+        SELECT
+        <include refid="Article_Base_Columns2">
+            <property name="article_alias" value="`a`"/>
+            <property name="member_alias" value="`bm`"/>
+            <property name="tag_alias" value="`at`"/>
+            <property name="article_prefix" value="article_"/>
+            <property name="member_prefix" value="member_"/>
+            <property name="tag_prefix" value="tag_"/>
+        </include>
+        FROM
+            (article `a` INNER JOIN `member` `bm` ON a.author_id = bm.id)
+            LEFT JOIN article_tag_relation `atr` ON  atr.article_id = a.id
+            LEFT JOIN article_tag `at` ON at.id = atr.tag_id
         WHERE
             a.id IN
             <foreach collection="articleIds" item="item" index="index" separator="," open="(" close=")">

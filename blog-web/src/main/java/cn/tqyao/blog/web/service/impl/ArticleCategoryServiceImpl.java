@@ -11,7 +11,9 @@ import cn.tqyao.blog.web.service.IArticleCategoryRelationService;
 import cn.tqyao.blog.web.service.IArticleCategoryService;
 import cn.tqyao.blog.web.service.IArticleService;
 import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO2;
 import cn.tqyao.blog.web.vo.CategoryArticleDetailVO;
+import cn.tqyao.blog.web.vo.CategoryDetailVO2;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -88,6 +90,17 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
         vo.setArticleBaseDetailVOList(baseVOList);
 
         return vo;
+    }
+
+    @Override
+    public CategoryDetailVO2 getCategoryArticleDetails(BasePageDTO dto, String categoryId) {
+        CategoryDetailVO2 vo = new CategoryDetailVO2 ();
+
+        ArticleCategory articleCategory = Optional.ofNullable (getById (categoryId)).orElseThrow (() -> new CommonException ("文章分类不存在"));
+        BeanUtils.copyProperties (articleCategory, vo);
+
+        IPage<ArticleBaseDetailVO2> baseVOList = 
+        return null;
     }
 
 }

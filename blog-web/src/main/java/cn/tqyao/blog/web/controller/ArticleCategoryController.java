@@ -7,6 +7,7 @@ import cn.tqyao.blog.entity.ArticleCategory;
 import cn.tqyao.blog.web.dto.ArticleCategoryDTO;
 import cn.tqyao.blog.web.service.IArticleCategoryService;
 import cn.tqyao.blog.web.vo.CategoryArticleDetailVO;
+import cn.tqyao.blog.web.vo.CategoryDetailVO2;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * <p>
@@ -78,6 +80,9 @@ public class ArticleCategoryController {
         return Result.success(articleCategoryService.getById(categoryId));
     }
 
+    //TODO : 2021/3/18 重写分类详情---------------------------------
+
+    @ApiIgnore
     @ApiOperation(value = "分类详情")
     @GetMapping("/category/detail/{id}")
     @ApiImplicitParam(name = "id", value = "类目ID", required = true, paramType = "path",
@@ -85,5 +90,15 @@ public class ArticleCategoryController {
     public Result<CategoryArticleDetailVO> getDetail(BasePageDTO dto, @PathVariable("id") String categoryId){
         return Result.success(articleCategoryService.getCategoryArticleDetail(dto, categoryId));
     }
+
+    @ApiOperation(value = "分类详情")
+    @GetMapping("/category/detail2/{id}")
+    @ApiImplicitParam(name = "id", value = "类目ID", required = true, paramType = "path",
+            dataType = "String", dataTypeClass = String.class)
+    public Result<CategoryDetailVO2> getCategoryDetail(BasePageDTO dto, @PathVariable("id") String categoryId){
+        return Result.success(articleCategoryService.getCategoryArticleDetails(dto, categoryId));
+    }
+
+    //TODO : 2021/3/18 重写分类详情---------------------------------
 
 }

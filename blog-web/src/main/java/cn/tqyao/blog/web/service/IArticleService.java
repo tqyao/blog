@@ -3,6 +3,7 @@ package cn.tqyao.blog.web.service;
 import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.web.dto.*;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO2;
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
 import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -68,6 +69,8 @@ public interface IArticleService extends IService<Article> {
      * @return
      */
     IPage<ArticleBaseDetailVO> getArticleBaseDetail(BasePageDTO dto, List<String> articleIds);
+
+    IPage<ArticleBaseDetailVO2> getArticleBaseDetail2(BasePageDTO dto, List<String> articleIds);
 
 //    IPage<Article> selectArticlePage(BasePageDTO dto, List<String> articleIds);
 }

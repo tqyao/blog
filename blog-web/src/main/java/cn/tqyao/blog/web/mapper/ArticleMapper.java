@@ -4,6 +4,7 @@ import cn.tqyao.blog.dao.ArticleDao;
 
 import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.web.dto.ArticleBaseDetailConditionDTO;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO2;
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
 import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -29,6 +30,8 @@ public interface ArticleMapper extends ArticleDao {
 //    List<ArticleBaseDetailVO> selectArticleBaseDetail(@Param("articleIds") List<String> articleIds);
 
     IPage<ArticleBaseDetailVO> selectArticleBaseDetail(@Param("page") Page page, @Param("articleIds") List<String> articleIds);
+
+    IPage<ArticleBaseDetailVO2> selectArticleBaseDetail2(@Param("page") Page page, @Param("articleIds") List<String> articleIds);
 
     IPage<ArticleBaseDetailVO> selectArticleBaseDetailConditionPage(@Param("page") Page<Article> page,
                                                                     @Param("condition") ArticleBaseDetailConditionDTO condition);

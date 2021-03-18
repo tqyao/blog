@@ -7,6 +7,7 @@ import cn.tqyao.blog.entity.*;
 import cn.tqyao.blog.web.dto.*;
 import cn.tqyao.blog.web.mapper.ArticleMapper;
 import cn.tqyao.blog.web.service.*;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO2;
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
 import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -338,6 +339,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public IPage<ArticleBaseDetailVO> getArticleBaseDetail(BasePageDTO dto, List<String> articleIds) {
         return baseMapper.selectArticleBaseDetail(PageUtil.getPage(dto),articleIds);
+    }
+
+    @Override
+    public IPage<ArticleBaseDetailVO2> getArticleBaseDetail2(BasePageDTO dto, List<String> articleIds) {
+        return baseMapper.selectArticleBaseDetail2(PageUtil.getPage(dto),articleIds);
     }
 
 //    @Override

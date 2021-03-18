@@ -23,15 +23,12 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @ApiModel(value="ArticleBaseDetailVO", description="文章基本详情信息")
-public class ArticleBaseDetailVO extends Article {
+public class ArticleBaseDetailVO2 extends Article {
 
     @ApiModelProperty(value = "文章作者基本信息")
     private MemberBaseVO memberBaseVO;
 
     @ApiModelProperty(value = "文章标签集")
     private List<ArticleTag> tagList;
-
-    @ApiModelProperty(value = "文章分类集")
-    private List<ArticleCategory> categoryList;
 
 }
