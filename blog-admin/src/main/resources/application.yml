@@ -8,13 +8,13 @@ spring:
     time-zone: GMT +8
   application:
     name: Blog-Open
-  ##Êı¾İ¿âÁ¬½ÓĞÅÏ¢
+  ##æ•°æ®åº“è¿æ¥ä¿¡æ¯
   datasource:
     url: jdbc:mysql://${mysql.url}:${mysql.port}/${mysql.database}?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&useAffectedRows=true&serverTimezone=CTT
     username: ${mysql.user}
     password: ${mysql.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # springboot Ä¬ÈÏÁ¬½Ó³ØHikari
+    # springboot é»˜è®¤è¿æ¥æ± Hikari
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       minimum-idle: 5
@@ -35,41 +35,52 @@ mybatis-plus:
   mapper-locations:
     - classpath:mapper/*.xml
     - classpath*:cn/**/dao/*.xml
-  #  type-aliases-package: cn.tqinyao.blog.entity.*
-  #  type-enums-package: cn.tqinyao.blog.enums
+#  type-aliases-package: cn.tqinyao.blog.entity.*
+#  type-enums-package: cn.tqinyao.blog.enums
   global-config:
-    # Êı¾İ¿âÏà¹ØÅäÖÃ
+  # æ•°æ®åº“ç›¸å…³é…ç½®
     db-config:
-      #Ö÷¼üÀàĞÍ  AUTO:"Êı¾İ¿âID×ÔÔö", INPUT:"ÓÃ»§ÊäÈëID",ID_WORKER:"È«¾ÖÎ¨Ò»ID (Êı×ÖÀàĞÍÎ¨Ò»ID)", UUID:"È«¾ÖÎ¨Ò»ID UUID";
+      #ä¸»é”®ç±»å‹  AUTO:"æ•°æ®åº“IDè‡ªå¢", INPUT:"ç”¨æˆ·è¾“å…¥ID",ID_WORKER:"å…¨å±€å”¯ä¸€ID (æ•°å­—ç±»å‹å”¯ä¸€ID)", UUID:"å…¨å±€å”¯ä¸€ID UUID";
       id-type: uuid
-  #    refresh: true
-  # ¶ş¼¶»º´æ
+#    refresh: true
+  # äºŒçº§ç¼“å­˜
   configuration:
     cache-enabled: false
 #logging:
 #    config: classpath:logback-boot.xml
 
 
-## ×Ô¶¨Òåredis key
+## è‡ªå®šä¹‰redis key
 redis:
   web-database: blog
   key:
     auth-code: 'b:authCode'
     member: 'b:member'
   expire:
-    auth-code: 90  # ÑéÖ¤Âë³¬ÆÚÊ±¼ä
-    common: 86400 # 24Ğ¡Ê±
+    auth-code: 90  # éªŒè¯ç è¶…æœŸæ—¶é—´
+    common: 86400 # 24å°æ—¶
   blacklist: 'b:blacklist'
-## ×Ô¶¨Òå jwt key
+## è‡ªå®šä¹‰ jwt key
 jwt:
-  token-header: Authorization #JWT´æ´¢µÄÇëÇóÍ·
-  refresh-token-header: Refresh_Token #JWT Ë¢ĞÂtokenÇëÇóÍ·
-  secret: blog-web-secret #JWT¼Ó½âÃÜÊ¹ÓÃµÄÃÜÔ¿
-  access-token-expiration: 7200 #JWT(ac)³¬Ê±Ê±¼ä(60*60*2)
-  refresh-token-expiration: 604800 #JWT(rft)µÄ³¬ÆÚÏŞÊ±¼ä(60*60*24*7)
-  token-head: 'Bearer '  #JWT¸ºÔØÖĞÄÃµ½¿ªÍ·
+  token-header: Authorization #JWTå­˜å‚¨çš„è¯·æ±‚å¤´
+  refresh-token-header: Refresh_Token #JWT åˆ·æ–°tokenè¯·æ±‚å¤´
+  secret: blog-web-secret #JWTåŠ è§£å¯†ä½¿ç”¨çš„å¯†é’¥
+  access-token-expiration: 7200 #JWT(ac)è¶…æ—¶æ—¶é—´(60*60*2)
+  refresh-token-expiration: 604800 #JWT(rft)çš„è¶…æœŸé™æ—¶é—´(60*60*24*7)
+  token-head: 'Bearer '  #JWTè´Ÿè½½ä¸­æ‹¿åˆ°å¼€å¤´
 
-# ===== ×Ô¶¨ÒåswaggerÅäÖÃ ===== #
+secure:
+  ignored:
+    urls:
+      - /article-tags/**
+      - /articles/list
+      - /articles/detail/*
+      - /api/files/**
+      - /members/member/refresh-token/**
+      - /members/member/register
+
+
+# ===== è‡ªå®šä¹‰swaggeré…ç½® ===== #
 swagger:
   enable: true
   application-name: ${spring.application.name}
@@ -79,18 +90,24 @@ swagger:
 
 ## aliyun oss
 aliyun:
-  access-id: LTAI4G65bskd8cY3JtiBZewp
-  access-secret: p2m0sqfz4mHZ4TbsijEbT3X8Uijbn0
-  oss:
-    endpoint: oss-cn-shenzhen.aliyuncs.com
-    url: https://b-blog-bucket.oss-cn-hangzhou.aliyuncs.com
-    accessKeyId: ${aliyun.access-id}
-    accessKeySecret: ${aliyun.access-secret}
-    bucketName: b-blog-bucket
-  dayu-sms:
-    product: Dysmsapi
-    domain: dysmsapi.aliyuncs.com
-    accessKeyId: ${aliyun.access-id}
-    accessKeySecret: ${aliyun.access-secret}
-    template-code: SMS_207745853
-    sign-name: yaoyao²©¿ÍÔ³
+ access-id: LTAI5tRcxp2yp5kwxwZyHch7
+ access-secret: OliIz6rccaJQjBaUIVd9OrxADKZT5N
+ oss:
+   endpoint: oss-cn-shenzhen.aliyuncs.com
+   url: https://b-blog-bucket.oss-cn-hangzhou.aliyuncs.com
+   accessKeyId: ${aliyun.access-id}
+   accessKeySecret: ${aliyun.access-secret}
+   bucketName: b-blog-bucket
+ dayu-sms:
+   product: Dysmsapi
+   domain: dysmsapi.aliyuncs.com
+   accessKeyId: ${aliyun.access-id}
+   accessKeySecret: ${aliyun.access-secret}
+   template-code: SMS_207745853
+   sign-name: yaoyaoåšå®¢çŒ¿
+
+
+
+
+
+

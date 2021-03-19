@@ -9,7 +9,7 @@
     <result column="update_time" property="updateTime" />
     <result column="deleted" property="deleted" />
         <result column="name" property="name" />
-        <result column="avatar" property="avatar" />
+        <result column="icon" property="icon" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

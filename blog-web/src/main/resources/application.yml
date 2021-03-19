@@ -73,6 +73,7 @@ secure:
   ignored:
     urls:
       - /article-tags/**
+      - /article-categories/**
       - /articles/list
       - /articles/detail/*
       - /api/files/**
@@ -90,8 +91,8 @@ swagger:
 
 ## aliyun oss
 aliyun:
- access-id: LTAI4G65bskd8cY3JtiBZewp
- access-secret: p2m0sqfz4mHZ4TbsijEbT3X8Uijbn0
+ access-id: LTAI5tRcxp2yp5kwxwZyHch7
+ access-secret: OliIz6rccaJQjBaUIVd9OrxADKZT5N
  oss:
    endpoint: oss-cn-shenzhen.aliyuncs.com
    url: https://b-blog-bucket.oss-cn-hangzhou.aliyuncs.com

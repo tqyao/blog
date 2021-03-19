@@ -73,13 +73,6 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
         ArticleCategory category = Optional.ofNullable(getById(categoryId)).orElseThrow(() -> new CommonException("分类不存在"));
         BeanUtils.copyProperties(category, vo);
 
-//        List<ArticleBaseDetailVO> baseVOList = Optional.ofNullable(articleCategoryRelationService
-//                .list(Wrappers.<ArticleCategoryRelation>lambdaQuery()
-//                        .eq(ArticleCategoryRelation::getCategoryId, category.getId())))
-//                .map(relations -> relations.stream()
-//                        .map(ArticleCategoryRelation::getArticleId).collect(Collectors.toList()))
-//                .map(articleIds -> articleService.getArticleBaseDetail(articleIds)).orElse(new ArrayList<>());
-
         IPage<ArticleBaseDetailVO> baseVOList = Optional.ofNullable(articleCategoryRelationService
                 .list(Wrappers.<ArticleCategoryRelation>lambdaQuery()
                         .eq(ArticleCategoryRelation::getCategoryId, category.getId())))
@@ -99,7 +92,14 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
         ArticleCategory articleCategory = Optional.ofNullable (getById (categoryId)).orElseThrow (() -> new CommonException ("文章分类不存在"));
         BeanUtils.copyProperties (articleCategory, vo);
 
-        IPage<ArticleBaseDetailVO2> baseVOList = 
+        IPage<ArticleBaseDetailVO2> baseVOList = Optional.ofNullable (articleCategoryRelationService
+                .list (Wrappers.<ArticleCategoryRelation>lambdaQuery ()
+                        .eq (ArticleCategoryRelation::getCategoryId, categoryId)))
+                .map (relations -> relations.stream ()
+                        .map (ArticleCategoryRelation::getArticleId).collect (Collectors.toList ()))
+                .map (articleId -> articleService.getArticleBaseDetail2 (dto, articleId)).orElse (new Page<> ());
+
+        vo.setArticleBaseDetailVOIPage (baseVOList);
         return null;
     }
 

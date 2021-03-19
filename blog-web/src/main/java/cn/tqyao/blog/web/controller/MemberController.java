@@ -14,7 +14,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author -Tanqy
@@ -32,18 +32,18 @@ public class MemberController {
     private IMemberService memberService;
 
     @ApiOperation(value = "注册")
-    @PostMapping("/register")
+    @PostMapping("/member/register")
     @ApiImplicitParam(name = "acToken", value = "access_token", required = true, paramType = "body",
             dataTypeClass = MemberRegisterDTO.class)
-    public Result register(@RequestBody MemberRegisterDTO dto){
-        memberService.register(dto);
-        return Result.success("注册成功！");
+    public Result register(@RequestBody MemberRegisterDTO dto) {
+        memberService.register (dto);
+        return Result.success ("注册成功！");
     }
 
     @ApiOperation(value = "获取当前登录用户信息")
     @GetMapping("/member/current")
-    public Result getCurrentMember(){
-        return Result.success(memberService.getCurrentMember());
+    public Result getCurrentMember() {
+        return Result.success (memberService.getCurrentMember ());
     }
 
     //TODO:
@@ -55,12 +55,12 @@ public class MemberController {
     @ApiImplicitParam(name = "refresh_token", value = "refresh类型的token", required = true,
             paramType = "path", dataType = "String", dataTypeClass = String.class)
     public Result logout(@ApiIgnore @RequestHeader(value = "Authorization", required = false) String accessToken,
-                         @PathVariable("refresh_token")String refreshToken){
-        memberService.logout(accessToken, refreshToken);
-        return Result.success();
+                         @PathVariable("refresh_token") String refreshToken) {
+        memberService.logout (accessToken, refreshToken);
+        return Result.success ();
     }
 
-    @ApiOperation(value = "无感登录",notes = "刷新token")
+    @ApiOperation(value = "无感登录", notes = "刷新token")
     @GetMapping("/refresh-token/{access-token}/{refresh-token}")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "access-token", value = "access类型的token", required = true,
@@ -70,19 +70,19 @@ public class MemberController {
     })
     public Result<JwtAuthenticationToken> refreshToken(
             @PathVariable(value = "access-token") String accessToken,
-            @PathVariable("refresh-token") String refreshToken){
+            @PathVariable("refresh-token") String refreshToken) {
 
         //TODO: 30分钟内刷新过，返回原token
 
-        return Result.success("刷新成功！",memberService.refreshToken(accessToken, refreshToken));
+        return Result.success ("刷新成功！", memberService.refreshToken (accessToken, refreshToken));
     }
 
     @ApiOperation(value = "获取验证码")
     @GetMapping("/member/code")
     @ApiImplicitParam(name = "telephone", value = "手机号", required = true,
             paramType = "query", dataType = "String", dataTypeClass = String.class)
-    public Result getAuthCode(@RequestParam("telephone") String telephone){
-        return Result.success(memberService.sendSms(telephone));
+    public Result getAuthCode(@RequestParam("telephone") String telephone) {
+        return Result.success (memberService.sendSms (telephone));
     }
 
 

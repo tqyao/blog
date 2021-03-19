@@ -170,7 +170,7 @@
                 </include>
             FROM
                 (article `a`
-                INNER JOIN `b_member` `bm` ON a.author_id = bm.id
+                INNER JOIN `member` `bm` ON a.author_id = bm.id
                 INNER JOIN article_body `ab` ON ab.id = a.body_id)
                 LEFT JOIN article_tag_relation `atr` ON  atr.article_id = a.id
                 LEFT JOIN article_tag `at` ON at.id = atr.tag_id
@@ -193,7 +193,7 @@
                 <property name="category_prefix" value="category_"/>
             </include>
         FROM
-            (article `a` INNER JOIN `b_member` `bm` ON a.author_id = bm.id)
+            (article `a` INNER JOIN `member` `bm` ON a.author_id = bm.id)
             LEFT JOIN article_tag_relation `atr` ON  atr.article_id = a.id
             LEFT JOIN article_tag `at` ON at.id = atr.tag_id
             LEFT JOIN article_category_relation `acr` ON acr.article_id = a.id
@@ -239,7 +239,7 @@
             <property name="category_prefix" value="category_"/>
         </include>
         FROM
-            (article `a` INNER JOIN `b_member` `bm` ON a.author_id = bm.id)
+            (article `a` INNER JOIN `member` `bm` ON a.author_id = bm.id)
             LEFT JOIN article_tag_relation `atr` ON  atr.article_id = a.id
             LEFT JOIN article_tag `at` ON at.id = atr.tag_id
             LEFT JOIN article_category_relation `acr` ON acr.article_id = a.id

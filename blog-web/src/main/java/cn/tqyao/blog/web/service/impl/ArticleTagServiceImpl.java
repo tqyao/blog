@@ -73,6 +73,7 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
 
         ArticleTag tag = Optional.ofNullable(getById(tagId)).orElseThrow(() -> new CommonException("标签不存在"));
 
+        //获取具有该标签的所有文章ID
         List<String> articleIds = Optional.ofNullable(articleTagRelationService
                 .list(Wrappers.<ArticleTagRelation>lambdaQuery()
                         .eq(ArticleTagRelation::getTagId, tag.getId())))
