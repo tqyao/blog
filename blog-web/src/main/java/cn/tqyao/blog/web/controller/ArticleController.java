@@ -14,6 +14,7 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Set;
@@ -96,30 +97,59 @@ public class ArticleController {
 //        return Result.status(articleService.addCategoryForArticle(dto));
 //    }
 
-    //TODO：分类改写
-    @ApiOperation(value = "为文章添加或修改分类",notes = "原文章有分类则替换")
+
+    //TODO：分类改写start 2021/3/22-------------------------------------------------------------------------------
+
+//    @ApiIgnore
+//    @ApiOperation(value = "为文章添加或修改分类",notes = "原文章有分类则替换")
+//    @PostMapping("/category/{article-id}")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "article-id", value = "文章ID",required = true,
+//                    paramType = "path", dataType = "String", dataTypeClass = String.class),
+//            @ApiImplicitParam(name = "category-id", value = "分类ID",required = true,
+//                    paramType = "query", dataType = "String", dataTypeClass = String.class)
+//    })
+//    public Result<Boolean> addCategoryForArticle(
+//            @PathVariable("article-id") String articleId,
+//            @RequestParam("category-id") String categoryId
+//    ){
+//        return Result.status(articleService.addCategoryForArticle(articleId, categoryId));
+//    }
+
+    @ApiOperation(value = "为文章添加或修改分类",notes = "新分类传递分类名称，已有分类传递分类ID")
     @PostMapping("/category/{article-id}")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "article-id", value = "文章ID",required = true,
                     paramType = "path", dataType = "String", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "category-id", value = "分类ID",required = true,
+            @ApiImplicitParam(name = "category", value = "分类ID",required = true,
                     paramType = "query", dataType = "String", dataTypeClass = String.class)
     })
     public Result<Boolean> addCategoryForArticle(
             @PathVariable("article-id") String articleId,
-            @RequestParam("category-id") String categoryId
+            @RequestParam("category") String category
     ){
-        return Result.status(articleService.addCategoryForArticle(articleId, categoryId));
+        return Result.status(articleService.addCategoryForArticle2(articleId, category));
     }
 
-    //TODO：分类改写
+
+//    @ApiOperation(value = "删除文章分类")
+//    @DeleteMapping("/category")
+//    public Result<Boolean> deletedCategoryForArticle(@RequestBody ArticleCategoryRelationDTO dto){
+//        return Result.status(articleService.deletedCategoryForArticle(dto));
+//    }
+
     @ApiOperation(value = "删除文章分类")
-    @DeleteMapping("/category")
-    public Result<Boolean> deletedCategoryForArticle(@RequestBody ArticleCategoryRelationDTO dto){
-        return Result.status(articleService.deletedCategoryForArticle(dto));
+    @DeleteMapping("/category/{article-id}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "article-id", value = "文章ID",required = true,
+                    paramType = "path", dataType = "String", dataTypeClass = String.class),
+    })
+    public Result<Boolean> deletedCategoryForArticle(@PathVariable("article-id") String articleId){
+        return Result.status(articleService.deletedCategoryForArticle(articleId));
     }
 
-    //TODO：分类改写
+    // TODO: 分类改写
+    @ApiIgnore
     @ApiOperation(value = "删除文章")
     @DeleteMapping("/article")
     @ApiImplicitParam(name = "ids[]",
@@ -132,19 +162,7 @@ public class ArticleController {
         return Result.status(articleService.deletedArticle(ids));
     }
 
-    @ApiOperation(value = "文章列表",notes = "文章列表分页")
-    @GetMapping("/list")
-    public Result<IPage<Article>> list(BasePageDTO dto){
-        return Result.success(articleService.homeList(dto));
-    }
 
-    @ApiOperation(value = "个人文章信息", notes = "文章列表")
-    @GetMapping("/personal-list")
-    public Result<IPage<Article>> personalArticleList(BasePageDTO dto){
-        return Result.success(articleService.personalArticleList(dto));
-    }
-
-    //TODO：分类改写
     @ApiOperation(value = "获取文章详细", notes = "文章body、分类、标签")
     @GetMapping("/detail/{id}")
     @ApiImplicitParam(name = "id",
@@ -157,5 +175,12 @@ public class ArticleController {
         return Result.success(articleService.getDetail(articleId));
     }
 
+    //TODO：分类改写end 2021/3/22-------------------------------------------------------------------------------
+
+    @ApiOperation(value = "个人文章信息", notes = "文章列表")
+    @GetMapping("/personal-list")
+    public Result<IPage<Article>> personalArticleList(BasePageDTO dto){
+        return Result.success(articleService.personalArticleList(dto));
+    }
 
 }

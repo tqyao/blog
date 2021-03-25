@@ -46,7 +46,7 @@ public interface IArticleService extends IService<Article> {
 
     Boolean deletedArticle(List<String> ids);
 
-    IPage<Article> homeList(BasePageDTO dto);
+
 
     IPage<Article> personalArticleList(BasePageDTO dto);
 
@@ -71,6 +71,11 @@ public interface IArticleService extends IService<Article> {
     IPage<ArticleBaseDetailVO> getArticleBaseDetail(BasePageDTO dto, List<String> articleIds);
 
     IPage<ArticleBaseDetailVO2> getArticleBaseDetail2(BasePageDTO dto, List<String> articleIds);
+
+    Boolean addCategoryForArticle2(String articleId, String category);
+
+    Boolean deletedCategoryForArticle(String articleId);
+
 
 //    IPage<Article> selectArticlePage(BasePageDTO dto, List<String> articleIds);
 }

@@ -10,6 +10,7 @@
     <result column="deleted" property="deleted" />
         <result column="body_id" property="bodyId" />
         <result column="author_id" property="authorId" />
+        <result column="category_id" property="categoryId" />
         <result column="title" property="title" />
         <result column="summary" property="summary" />
         <result column="view_count" property="viewCount" />
@@ -26,7 +27,7 @@
         create_time,
         update_time,
         deleted,
-        body_id, author_id, title, summary, view_count, like_count, comment_count, collect_count, weight, draft
+        body_id, author_id, category_id, title, summary, view_count, like_count, comment_count, collect_count, weight, draft
     </sql>
 
 </mapper>

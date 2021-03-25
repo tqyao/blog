@@ -18,7 +18,7 @@
         create_time,
         update_time,
         deleted,
-        `name`, avatar
+        `name`, icon
     </sql>
 
 </mapper>

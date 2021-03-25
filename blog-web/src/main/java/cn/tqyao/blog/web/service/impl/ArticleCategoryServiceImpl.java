@@ -100,7 +100,7 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
                 .map (articleId -> articleService.getArticleBaseDetail2 (dto, articleId)).orElse (new Page<> ());
 
         vo.setArticleBaseDetailVOIPage (baseVOList);
-        return null;
+        return vo;
     }
 
 }

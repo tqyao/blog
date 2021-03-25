@@ -37,6 +37,4 @@ public class ArticleDetailVO extends Article {
     @ApiModelProperty(value = "文章标签集")
     private List<ArticleTag> tagList;
 
-    @ApiModelProperty(value = "文章分类集")
-    private List<ArticleCategory> categoryList;
 }

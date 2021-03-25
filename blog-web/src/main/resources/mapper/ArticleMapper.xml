@@ -119,7 +119,6 @@
         <association property="memberBaseVO" columnPrefix="member_" resultMap="cn.tqyao.blog.web.mapper.MemberMapper.MemberBaseMap" />
         <association property="articleBody" columnPrefix="body_" resultMap="cn.tqyao.blog.dao.ArticleBodyDao.BaseResultMap" />
         <collection property="tagList" columnPrefix="tag_" resultMap="cn.tqyao.blog.dao.ArticleTagDao.BaseResultMap"/>
-        <collection property="categoryList" columnPrefix="category_" resultMap="cn.tqyao.blog.dao.ArticleCategoryDao.BaseResultMap"/>
     </resultMap>
 
     <sql id="Article_Detail_Columns">
@@ -161,12 +160,10 @@
                     <property name="member_alias" value="`bm`"/>
                     <property name="body_alias" value="`ab`"/>
                     <property name="tag_alias" value="`at`"/>
-                    <property name="category_alias" value="`ac`"/>
                     <property name="article_prefix" value="article_"/>
                     <property name="member_prefix" value="member_"/>
                     <property name="body_prefix" value="body_"/>
                     <property name="tag_prefix" value="tag_"/>
-                    <property name="category_prefix" value="category_"/>
                 </include>
             FROM
                 (article `a`
@@ -174,8 +171,6 @@
                 INNER JOIN article_body `ab` ON ab.id = a.body_id)
                 LEFT JOIN article_tag_relation `atr` ON  atr.article_id = a.id
                 LEFT JOIN article_tag `at` ON at.id = atr.tag_id
-                LEFT JOIN article_category_relation `acr` ON acr.article_id = a.id
-                LEFT JOIN article_category `ac` ON ac.id = acr.category_id
             WHERE
                 a.id = #{articleId}
     </select>
