@@ -27,7 +27,7 @@ public class ArticleCategory extends BaseEntity {
     private String name;
 
     @ApiModelProperty(value = "分类图片")
-    private String avatar;
+    private String icon;
 
 
 }

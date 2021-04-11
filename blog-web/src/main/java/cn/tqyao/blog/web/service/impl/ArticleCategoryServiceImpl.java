@@ -11,9 +11,12 @@ import cn.tqyao.blog.web.service.IArticleCategoryRelationService;
 import cn.tqyao.blog.web.service.IArticleCategoryService;
 import cn.tqyao.blog.web.service.IArticleService;
 import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO2;
 import cn.tqyao.blog.web.vo.CategoryArticleDetailVO;
+import cn.tqyao.blog.web.vo.CategoryDetailVO2;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,21 +67,39 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
     }
 
     @Override
-    public CategoryArticleDetailVO getCategoryArticleDetail(String categoryId) {
+    public CategoryArticleDetailVO getCategoryArticleDetail(BasePageDTO dto, String categoryId) {
         CategoryArticleDetailVO vo = new CategoryArticleDetailVO();
 
         ArticleCategory category = Optional.ofNullable(getById(categoryId)).orElseThrow(() -> new CommonException("分类不存在"));
         BeanUtils.copyProperties(category, vo);
 
-        List<ArticleBaseDetailVO> baseVOList = Optional.ofNullable(articleCategoryRelationService
+        IPage<ArticleBaseDetailVO> baseVOList = Optional.ofNullable(articleCategoryRelationService
                 .list(Wrappers.<ArticleCategoryRelation>lambdaQuery()
                         .eq(ArticleCategoryRelation::getCategoryId, category.getId())))
                 .map(relations -> relations.stream()
                         .map(ArticleCategoryRelation::getArticleId).collect(Collectors.toList()))
-                .map(articleIds -> articleService.getArticleBaseDetail(articleIds)).orElse(new ArrayList<>());
+                .map(articleIds -> articleService.getArticleBaseDetail(dto,articleIds)).orElse(new Page<>());
 
         vo.setArticleBaseDetailVOList(baseVOList);
 
+        return vo;
+    }
+
+    @Override
+    public CategoryDetailVO2 getCategoryArticleDetails(BasePageDTO dto, String categoryId) {
+        CategoryDetailVO2 vo = new CategoryDetailVO2 ();
+
+        ArticleCategory articleCategory = Optional.ofNullable (getById (categoryId)).orElseThrow (() -> new CommonException ("文章分类不存在"));
+        BeanUtils.copyProperties (articleCategory, vo);
+
+        IPage<ArticleBaseDetailVO2> baseVOList = Optional.ofNullable (articleCategoryRelationService
+                .list (Wrappers.<ArticleCategoryRelation>lambdaQuery ()
+                        .eq (ArticleCategoryRelation::getCategoryId, categoryId)))
+                .map (relations -> relations.stream ()
+                        .map (ArticleCategoryRelation::getArticleId).collect (Collectors.toList ()))
+                .map (articleId -> articleService.getArticleBaseDetail2 (dto, articleId)).orElse (new Page<> ());
+
+        vo.setArticleBaseDetailVOIPage (baseVOList);
         return vo;
     }
 

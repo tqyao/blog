@@ -3,10 +3,13 @@ package cn.tqyao.blog.web.service;
 import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.web.dto.*;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO2;
 import cn.tqyao.blog.web.vo.ArticleDetailVO;
 import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -43,7 +46,7 @@ public interface IArticleService extends IService<Article> {
 
     Boolean deletedArticle(List<String> ids);
 
-    IPage<Article> homeList(BasePageDTO dto);
+
 
     IPage<Article> personalArticleList(BasePageDTO dto);
 
@@ -54,12 +57,25 @@ public interface IArticleService extends IService<Article> {
      */
     ArticleDetailVO getDetail(String articleId);
 
+//    /**
+//     * 获取文章基本详情信息(作者、文章、分类、标签)
+//     * @param articleIds
+//     * @return
+//     */
+//    List<ArticleBaseDetailVO> getArticleBaseDetail(List<String> articleIds);
     /**
      * 获取文章基本详情信息(作者、文章、分类、标签)
      * @param articleIds
      * @return
      */
-    List<ArticleBaseDetailVO> getArticleBaseDetail(List<String> articleIds);
+    IPage<ArticleBaseDetailVO> getArticleBaseDetail(BasePageDTO dto, List<String> articleIds);
+
+    IPage<ArticleBaseDetailVO2> getArticleBaseDetail2(BasePageDTO dto, List<String> articleIds);
+
+    Boolean addCategoryForArticle2(String articleId, String category);
+
+    Boolean deletedCategoryForArticle(String articleId);
 
 
+//    IPage<Article> selectArticlePage(BasePageDTO dto, List<String> articleIds);
 }

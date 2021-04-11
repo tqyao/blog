@@ -4,6 +4,7 @@ import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.entity.ArticleCategory;
 import cn.tqyao.blog.web.dto.ArticleCategoryDTO;
 import cn.tqyao.blog.web.vo.CategoryArticleDetailVO;
+import cn.tqyao.blog.web.vo.CategoryDetailVO2;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -23,6 +24,7 @@ public interface IArticleCategoryService extends IService<ArticleCategory> {
 
     IPage<ArticleCategory> listCategory(BasePageDTO dto);
 
-    CategoryArticleDetailVO getCategoryArticleDetail(String categoryId);
+    CategoryArticleDetailVO getCategoryArticleDetail(BasePageDTO dto, String categoryId);
 
+    CategoryDetailVO2 getCategoryArticleDetails(BasePageDTO dto, String categoryId);
 }

@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-@ApiModel(value="TagArticleDetailVO", description="标签文章基本信息VO")
+@ApiModel(value="ArticleBaseDetailVO", description="文章基本详情信息")
 public class ArticleBaseDetailVO extends Article {
 
     @ApiModelProperty(value = "文章作者基本信息")

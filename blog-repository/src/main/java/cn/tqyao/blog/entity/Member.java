@@ -25,7 +25,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("b_member")
+@TableName("member")
 @ApiModel(value="Member对象", description="")
 public class Member extends BaseEntity {
 

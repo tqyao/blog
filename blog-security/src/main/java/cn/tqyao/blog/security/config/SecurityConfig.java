@@ -1,5 +1,6 @@
 package cn.tqyao.blog.security.config;
 
+import cn.tqyao.blog.security.dynamic.DynamicSecurityService;
 import cn.tqyao.blog.security.filter.SecurityAuthenticationFilter;
 import cn.tqyao.blog.security.filter.SecurityLoginAuthenticationFilter;
 import cn.tqyao.blog.security.handle.JsonAuthenticationEntryPoint;
@@ -9,6 +10,8 @@ import cn.tqyao.blog.security.handle.JsonLoginSuccessHandler;
 import cn.tqyao.blog.security.util.JwtTokenUtil;
 import cn.tqyao.blog.security.util.RedisSecurityUtil;
 import cn.tqyao.blog.security.util.SecurityUtil;
+import com.baomidou.mybatisplus.extension.api.R;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +30,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @version 1.0.0 <br>
 */
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired(required = false)
+    private DynamicSecurityService dynamicSecurityService;
 
 
     /**
@@ -65,18 +71,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        // /不需要保护的资源路径允许访问
+        for (String url : ignoreUrlsConfig().getUrls ()) {
+            http.authorizeRequests().antMatchers (url).permitAll ();
+        }
+
         // 关闭跨站请求防护及不使用session
         http.cors().and()
-                .csrf().disable().authorizeRequests()
-                .antMatchers(
-                        "/members/member/refresh-token/**",
-                        "/members/member/register",
-                        "/article-categories/**",
-                        "/article-tags/**",
-                        "/articles/list",
-                        "/articles/detail/*",
-                        "/api/files/**").permitAll()
-                .and()
+                .csrf().disable()
                 // 任何请求需要身份认证
                 .authorizeRequests()
                 .anyRequest()
@@ -90,6 +93,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(securityLoginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(securityAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+//        if (dynamicSecurityService != null) {
+//
+//        }
 
     }
 //
@@ -158,5 +165,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new SecurityAuthenticationFilter(authenticationManagerBean(), jsonAuthenticationEntryPoint());
     }
 
+    @Bean
+    public IgnoreUrlsConfig ignoreUrlsConfig(){
+        return new IgnoreUrlsConfig ();
+    }
 
 }

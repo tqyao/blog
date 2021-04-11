@@ -3,15 +3,23 @@
  */
 
 
+import cn.tqyao.blog.common.base.BasePageDTO;
 import cn.tqyao.blog.common.redis.RedisService;
+import cn.tqyao.blog.common.util.PageUtil;
 import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.entity.Member;
+import cn.tqyao.blog.security.JwtTokenTypeEnum;
+import cn.tqyao.blog.security.util.JwtTokenUtil;
 import cn.tqyao.blog.web.BlogWebApplication;
 import cn.tqyao.blog.web.config.RedisProperties;
+import cn.tqyao.blog.web.dto.ArticleBaseDetailConditionDTO;
 import cn.tqyao.blog.web.mapper.ArticleMapper;
 import cn.tqyao.blog.web.service.IMemberCacheService;
 import cn.tqyao.blog.web.service.IMemberService;
+import cn.tqyao.blog.web.vo.ArticleBaseDetailVO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
@@ -23,6 +31,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.sql.Wrapper;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -116,5 +126,28 @@ public class SpringWebYmlTest {
         sqlSession.close();
     }
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Test
+    public void testCreateToken(){
+        System.out.println(jwtTokenUtil.generateToken("tqyao",new Date(),JwtTokenTypeEnum.ACCESS_TOKEN));
+    }
 
+    @Autowired
+    private ArticleMapper articleMapper;
+    @Test
+    public void testArticleApi(){
+        Page<Article> page = PageUtil.getPage(new BasePageDTO());
+        IPage<ArticleBaseDetailVO> VO = articleMapper.selectArticleBaseDetailConditionPage(page, new ArticleBaseDetailConditionDTO());
+        System.out.println("VO================================>" + VO);
+        VO.getRecords().stream().forEach(System.out::println);
+    }
+
+    @Test
+    public void testArticleApi2(){
+        ArrayList<String> ids = new ArrayList<>();
+        ids.add("f1db3aa19b261879c443c39e77663625");
+        ids.add("df60e3841602887b869ae77dba257d6a");
+        articleMapper.selectArticleBaseDetail(new Page(1L,100L),ids);
+    }
 }

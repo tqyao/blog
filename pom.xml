@@ -16,6 +16,7 @@
         <module>blog-repository</module>
         <module>blog-security</module>
         <module>blog-web</module>
+        <module>blog-ui</module>
     </modules>
 
     <!-- parent指明继承关系，给出被继承的父项目的具体信息-->
@@ -27,9 +28,10 @@
     </parent>
 
     <properties>
+        <resource.delimiter>#</resource.delimiter>
         <java.version>1.8</java.version>
         <mysql-connector.version>8.0.15</mysql-connector.version>
-        <mybatis-generator.version>3.2.0</mybatis-generator.version>
+        <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
         <fastjson.version>1.2.66</fastjson.version>
         <hutool.version>4.5.9</hutool.version>
         <mybatis-plus.version>3.3.0</mybatis-plus.version>
@@ -44,6 +46,7 @@
         <aliyun.oss.version>3.10.2</aliyun.oss.version>
         <aliyun-java-sdk-core.version>4.0.6</aliyun-java-sdk-core.version>
         <aliyun-java-sdk-dysmsapi.version>1.1.0</aliyun-java-sdk-dysmsapi.version>
+        <mybatis-plus-generator-ui.version>1.4.2</mybatis-plus-generator-ui.version>
     </properties>
 
     <dependencies>
@@ -99,7 +102,7 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
-                <version>${mybatis-plus.version}</version>
+                <version>${mybatis-plus-generator.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.freemarker</groupId>
@@ -159,8 +162,67 @@
                 <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
                 <version>${aliyun-java-sdk-dysmsapi.version}</version>
             </dependency>
+
+            <!-- mybatis-plus-generator-ui-->
+            <dependency>
+                <groupId>com.github.davidfantasy</groupId>
+                <artifactId>mybatis-plus-generator-ui</artifactId>
+                <version>${mybatis-plus-generator-ui.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <profiles>
+        <!--开发环境-->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <profiles.active>dev</profiles.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <!--测试环境-->
+        <profile>
+            <id>test</id>
+            <properties>
+                <profiles.active>test</profiles.active>
+            </properties>
+        </profile>
+        <!--生产环境-->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profiles.active>prod</profiles.active>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <resources>
+            <!--排除配置文件-->
+            <resource>
+                <directory>src/main/resources</directory>
+                <!--先排除所有的配置文件-->
+                <excludes>
+                    <!--使用通配符，当然可以定义多个exclude标签进行排除-->
+                    <exclude>application*.yml</exclude>
+                </excludes>
+            </resource>
+
+            <!--根据激活条件引入打包所需的配置和文件-->
+            <resource>
+                <directory>src/main/resources</directory>
+                <!--引入所需环境的配置文件-->
+                <filtering>true</filtering>
+                <includes>
+                    <include>application.yml</include>
+                    <!--根据maven选择环境导入配置文件-->
+                    <include>application-${profiles.active}.yml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 
 </project>

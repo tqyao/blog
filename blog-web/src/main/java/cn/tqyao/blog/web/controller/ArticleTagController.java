@@ -55,8 +55,8 @@ public class ArticleTagController {
 
     @ApiOperation(value = "查看标签详情")
     @GetMapping("/detail/{tag-id}")
-    public Result<TagDetailVO> getDetail(@PathVariable("tag-id") String tagId) {
-        return Result.success(articleTagService.getTagDetail(tagId));
+    public Result<TagDetailVO> getDetail(@PathVariable("tag-id") String tagId, BasePageDTO dto) {
+        return Result.success(articleTagService.getTagDetail(tagId, dto));
     }
 
     @ApiOperation(value = "删除标签")
