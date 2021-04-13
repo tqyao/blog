@@ -4,8 +4,7 @@
 package cn.tqyao.blog.security.util;
 
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.date.DateUnit;
-import cn.tqyao.blog.security.JwtTokenTypeEnum;
+import cn.tqyao.blog.security.domain.JwtTokenTypeEnum;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.jsonwebtoken.*;
 import lombok.Getter;
@@ -21,8 +20,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static cn.tqyao.blog.security.JwtTokenTypeEnum.ACCESS_TOKEN;
-import static cn.tqyao.blog.security.JwtTokenTypeEnum.REFRESH_TOKEN;
+import static cn.tqyao.blog.security.domain.JwtTokenTypeEnum.ACCESS_TOKEN;
+import static cn.tqyao.blog.security.domain.JwtTokenTypeEnum.REFRESH_TOKEN;
 
 /**
  * .<br>

@@ -5,7 +5,7 @@ import cn.tqyao.blog.common.exception.CommonException;
 import cn.tqyao.blog.common.result.ResultCode;
 import cn.tqyao.blog.common.util.sms.AliyunSmsSendProperties;
 import cn.tqyao.blog.entity.Member;
-import cn.tqyao.blog.security.JwtAuthenticationToken;
+import cn.tqyao.blog.security.domain.JwtAuthenticationToken;
 import cn.tqyao.blog.security.util.RedisSecurityUtil;
 import cn.tqyao.blog.security.util.SecurityUtil;
 import cn.tqyao.blog.web.config.MemberDetails;

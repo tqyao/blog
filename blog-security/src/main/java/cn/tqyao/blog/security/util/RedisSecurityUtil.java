@@ -4,13 +4,8 @@
 package cn.tqyao.blog.security.util;
 
 import cn.tqyao.blog.common.redis.RedisService;
-import cn.tqyao.blog.security.JwtTokenTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-
-import java.util.List;
-import java.util.Optional;
 
 
 /**

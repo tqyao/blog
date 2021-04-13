@@ -1,11 +1,9 @@
 package cn.tqyao.blog.security.filter;
 
 
-import cn.tqyao.blog.security.JwtAuthenticationToken;
-import cn.tqyao.blog.security.util.SecurityUtil;
+import cn.tqyao.blog.security.domain.JwtAuthenticationToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;

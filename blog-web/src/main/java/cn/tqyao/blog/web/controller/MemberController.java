@@ -2,7 +2,7 @@ package cn.tqyao.blog.web.controller;
 
 
 import cn.tqyao.blog.common.result.Result;
-import cn.tqyao.blog.security.JwtAuthenticationToken;
+import cn.tqyao.blog.security.domain.JwtAuthenticationToken;
 import cn.tqyao.blog.web.dto.MemberRegisterDTO;
 import cn.tqyao.blog.web.service.IMemberService;
 import io.swagger.annotations.*;

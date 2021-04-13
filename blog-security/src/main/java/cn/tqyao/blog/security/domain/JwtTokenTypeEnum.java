@@ -1,4 +1,4 @@
-package cn.tqyao.blog.security;
+package cn.tqyao.blog.security.domain;
 
 import lombok.Getter;
 

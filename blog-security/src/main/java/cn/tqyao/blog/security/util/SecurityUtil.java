@@ -4,8 +4,8 @@
 package cn.tqyao.blog.security.util;
 
 import cn.tqyao.blog.common.result.ResultCode;
-import cn.tqyao.blog.security.JwtAuthenticationToken;
-import cn.tqyao.blog.security.JwtTokenTypeEnum;
+import cn.tqyao.blog.security.domain.JwtAuthenticationToken;
+import cn.tqyao.blog.security.domain.JwtTokenTypeEnum;
 import cn.tqyao.blog.security.exception.TokenAuthenticationException;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.jsonwebtoken.*;
@@ -20,8 +20,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
-import static cn.tqyao.blog.security.JwtTokenTypeEnum.ACCESS_TOKEN;
-import static cn.tqyao.blog.security.JwtTokenTypeEnum.REFRESH_TOKEN;
+import static cn.tqyao.blog.security.domain.JwtTokenTypeEnum.ACCESS_TOKEN;
+import static cn.tqyao.blog.security.domain.JwtTokenTypeEnum.REFRESH_TOKEN;
 
 /**
  * .<br>

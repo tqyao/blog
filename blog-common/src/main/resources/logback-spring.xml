@@ -5,7 +5,7 @@
 <!--    https://mrbird.cc/Spring-Boot-logback.html-->
 <!--    http://tengj.top/2017/04/05/springboot7/-->
 
-    <springProperty scope="context" name="LOG_HOME" source="logging.file.path" />
+<!--    <springProperty scope="context" name="LOG_HOME" source="logging.file.path" />-->
     <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
     <!--引用默认日志配置-->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
@@ -79,7 +79,7 @@
 
     <logger name="cn.tqyao.blog" level="INFO"/>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE_DEBUG"/>
         <appender-ref ref="FILE_ERROR"/>
