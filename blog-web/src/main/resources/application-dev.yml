@@ -20,3 +20,6 @@ mybatis-plus:
 logging:
   file:
     path: ./logs
+#  level:
+#    root: info
+#    cn.tqyao.blog: debug
