@@ -30,7 +30,7 @@ public class WebLog {
     @ApiModelProperty(value = "消耗时间")
     private Integer spendTime;
 
-    @ApiModelProperty(value = "跟路径")
+    @ApiModelProperty(value = "根路径")
     private String basePath;
 
     @ApiModelProperty(value = "URI")
