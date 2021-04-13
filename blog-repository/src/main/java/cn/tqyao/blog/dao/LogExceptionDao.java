@@ -1,9 +1,7 @@
-package cn.tqyao.blog.admin.mapper;
+package cn.tqyao.blog.dao;
 
-import cn.tqyao.blog.dao.LogExceptionDao;
 import cn.tqyao.blog.entity.LogException;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Repository;
  * @author tqyao
  * @since 2021-04-13
  */
-@Repository
-public interface LogExceptionMapper extends LogExceptionDao {
+public interface LogExceptionDao extends BaseMapper<LogException> {
 
 }

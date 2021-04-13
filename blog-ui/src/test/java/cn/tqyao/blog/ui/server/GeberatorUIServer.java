@@ -51,7 +51,7 @@ public class GeberatorUIServer {
                      */
                     @Override
                     public String controllerNameConvert(String tableName) {
-                        return this.entityNameConvert(tableName) + "controller";
+                        return this.entityNameConvert(tableName) + "Controller";
                     }
                 })
                 .typeConvert(new MySqlTypeConvert() {
