@@ -1,7 +1,7 @@
 /**
  * Copyright 2020-2030 The author personally reserves all rights.
  */
-package cn.tqyao.blog.common.domain;
+package cn.tqyao.blog.common.log.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

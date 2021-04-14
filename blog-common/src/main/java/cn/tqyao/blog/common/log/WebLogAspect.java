@@ -6,12 +6,10 @@ package cn.tqyao.blog.common.log;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.json.JSONUtil;
-import cn.tqyao.blog.common.domain.WebLog;
+import cn.tqyao.blog.common.log.domain.WebLog;
 import com.aliyuncs.utils.StringUtils;
-import com.baomidou.mybatisplus.extension.api.R;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.protocol.RequestContent;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -46,6 +44,15 @@ import java.util.*;
 public class WebLogAspect {
 
 
+    /**
+     * execution(方法修饰符 返回类型 方法所属的包.类名.方法名称(方法参数)
+     * 1）execution(* *(..))
+     * //表示匹配所有方法
+     * 2）execution(public * com. example.controller.*(..))
+     * //表示匹配com. example.controller中所有的public方法
+     * 3）execution(* com. example.controller..*.*(..))
+     * //表示匹配com. example.controller包及其子包下的所有方法
+     */
     @Pointcut("execution(public *  cn.tqyao.blog.*.controller.*.*(..))")
     public void webLog() {
 

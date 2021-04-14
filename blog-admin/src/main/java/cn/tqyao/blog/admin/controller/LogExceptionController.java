@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import cn.tqyao.blog.admin.service.LogExceptionService;
 import cn.tqyao.blog.entity.LogException;
 import org.springframework.beans.factory.annotation.Autowired;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * <p>
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author tqyao
  * @since 2021-04-13
  */
+@ApiIgnore
 @Controller
 @RequestMapping("/logException")
 public class LogExceptionController {

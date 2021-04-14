@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.Date;
+
 /**
  * <p>
  * 后台管理-异常日志
@@ -51,6 +54,13 @@ public class LogException extends BaseEntity{
     @ApiModelProperty(value = "用户代理")
     private String userAgent;
 
-
+    public LogException(String uri, String method, String description, String error, String ip, String userAgent) {
+        this.uri = uri;
+        this.method = method;
+        this.description = description;
+        this.error = error;
+        this.ip = ip;
+        this.userAgent = userAgent;
+    }
 
 }
