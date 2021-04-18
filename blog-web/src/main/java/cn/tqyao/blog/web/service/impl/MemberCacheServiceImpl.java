@@ -5,6 +5,7 @@ package cn.tqyao.blog.web.service.impl;
 
 import cn.tqyao.blog.common.redis.RedisService;
 import cn.tqyao.blog.entity.Member;
+import cn.tqyao.blog.security.annotation.CacheException;
 import cn.tqyao.blog.web.config.RedisProperties;
 import cn.tqyao.blog.web.service.IMemberCacheService;
 import cn.tqyao.blog.web.service.IMemberService;
@@ -65,12 +66,14 @@ public class MemberCacheServiceImpl implements IMemberCacheService {
         redisService.set(key, member, REDIS_EXPIRE);
     }
 
+    @CacheException
     @Override
     public void setAuthCode(String telephone, String authCode) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE + ":" + telephone;
         redisService.set(key,authCode,REDIS_EXPIRE_AUTH_CODE);
     }
 
+    @CacheException
     @Override
     public String getAuthCode(String telephone) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE + ":" + telephone;
