@@ -2,6 +2,7 @@ package cn.tqyao.blog.dao;
 
 import cn.tqyao.blog.entity.LogException;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author tqyao
  * @since 2021-04-13
  */
+@Repository
 public interface LogExceptionDao extends BaseMapper<LogException> {
 
 }
