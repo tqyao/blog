@@ -8,6 +8,14 @@ spring:
     time-zone: GMT +8
   application:
     name: blog-api
+  # mongo 连接信息
+  data:
+    mongodb:
+      host: ${mongodb.host}
+      port: ${mongodb.port}
+      username: ${mongodb.username}
+      password: ${mongodb.password}
+      database: ${mongodb.database}
   ##数据库连接信息
   datasource:
     url: jdbc:mysql://${mysql.url}:${mysql.port}/${mysql.database}?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&useAffectedRows=true&serverTimezone=CTT

@@ -11,6 +11,13 @@ redis:
   password: 790461387
   database: 0
   timeout: 30s
+# mongodb配置
+mongodb:
+  host: 47.112.114.47
+  port: 27017
+  database: blog
+  username: blog
+  password: 790461387
 swagger:
   enable: true
 # 配置slq打印日志

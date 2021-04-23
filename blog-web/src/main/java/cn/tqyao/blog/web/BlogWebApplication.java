@@ -6,6 +6,7 @@ package cn.tqyao.blog.web;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication(scanBasePackages = "cn.tqyao.blog")
 @MapperScan(basePackages = "cn.tqyao.blog.web.mapper")
+@EnableAsync //开启异步支持
 //@ComponentScans(value = {})
 public class BlogWebApplication {
     public static void main(String[] args) {
