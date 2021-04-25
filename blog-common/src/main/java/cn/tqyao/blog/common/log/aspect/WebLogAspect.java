@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.json.JSONUtil;
 import cn.tqyao.blog.common.log.domain.WebLog;
+import cn.tqyao.blog.common.util.AopUtils;
 import com.aliyuncs.utils.StringUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -92,20 +93,14 @@ public class WebLogAspect {
         WebLog webLog = new WebLog ();
         // 执行方法
         Object result = joinPoint.proceed ();
-        Signature signature = joinPoint.getSignature ();
-        MethodSignature methodSignature = (MethodSignature) signature;
-        Method method = methodSignature.getMethod ();
         // 获取 ApiOperation 上的value描述,赋值给webLog
-        if (method.isAnnotationPresent (ApiOperation.class)) {
-            ApiOperation apiOperation = method.getAnnotation (ApiOperation.class);
-            webLog.setDescription (apiOperation.value ());
-        }
+        AopUtils.getDescriptionFromAnnotations (joinPoint);
         long endTime = System.currentTimeMillis ();
         String urlStr = request.getRequestURL ().toString ();
         webLog.setBasePath (StrUtil.removeSuffix (urlStr, URLUtil.url (urlStr).getPath ()));
         webLog.setIp (request.getRemoteUser ());
         webLog.setMethod (request.getMethod ());
-        webLog.setParameter (getParameter (method, joinPoint.getArgs ()));
+        webLog.setParameter (AopUtils.getRequestParams (joinPoint));
         webLog.setResult (result);
         webLog.setSpendTime ((int) (endTime - startTime));
         webLog.setStarTime (startTime);
@@ -115,41 +110,41 @@ public class WebLogAspect {
         return result;
     }
 
-    /**
-     * 根据方法和传入参数获取请求参数
-     *
-     * @param method
-     * @param args
-     * @return
-     */
-    private Object getParameter(Method method, Object[] args) {
-        List<Object> argList = new ArrayList<> ();
-        Parameter[] parameters = method.getParameters ();
-        for (int i = 0; i < parameters.length; i++) {
-            //将RequestBody注解修饰的参数作为请求参数
-            RequestBody requestBody = parameters[i].getAnnotation (RequestBody.class);
-            if (requestBody != null) {
-                argList.add (args[i]);
-            }
-            //将RequestParam注解修饰的参数作为请求参数
-            RequestParam requestParam = parameters[i].getAnnotation (RequestParam.class);
-            if (requestParam != null) {
-                Map<String, Object> map = new HashMap<> ();
-                String key = parameters[i].getName ();
-                if (StringUtils.isEmpty (requestParam.value ())) {
-                    key = requestParam.value ();
-                }
-                map.put (key, args[i]);
-                argList.add (map);
-            }
-        }
-        if (argList.size () == 0) {
-            return null;
-        } else if (argList.size () == 1) {
-            return argList.get (0);
-        } else {
-            return argList;
-        }
-    }
+//    /**
+//     * 根据方法和传入参数获取请求参数
+//     *
+//     * @param method
+//     * @param args
+//     * @return
+//     */
+//    private Object getParameter(Method method, Object[] args) {
+//        List<Object> argList = new ArrayList<> ();
+//        Parameter[] parameters = method.getParameters ();
+//        for (int i = 0; i < parameters.length; i++) {
+//            //将RequestBody注解修饰的参数作为请求参数
+//            RequestBody requestBody = parameters[i].getAnnotation (RequestBody.class);
+//            if (requestBody != null) {
+//                argList.add (args[i]);
+//            }
+//            //将RequestParam注解修饰的参数作为请求参数
+//            RequestParam requestParam = parameters[i].getAnnotation (RequestParam.class);
+//            if (requestParam != null) {
+//                Map<String, Object> map = new HashMap<> ();
+//                String key = parameters[i].getName ();
+//                if (StringUtils.isEmpty (requestParam.value ())) {
+//                    key = requestParam.value ();
+//                }
+//                map.put (key, args[i]);
+//                argList.add (map);
+//            }
+//        }
+//        if (argList.size () == 0) {
+//            return null;
+//        } else if (argList.size () == 1) {
+//            return argList.get (0);
+//        } else {
+//            return argList;
+//        }
+//    }
 
 }

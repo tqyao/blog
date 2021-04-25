@@ -1,13 +1,16 @@
 package cn.tqyao.blog.common.util;
 
+import io.swagger.annotations.ApiOperation;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 /**
  * AOP工具类
  * .<br>
@@ -19,6 +22,11 @@ import java.util.Map;
 public class AopUtils {
 
 
+    /**
+     * 获取方法参数键值对
+     * @param joinPoint
+     * @return
+     */
     public static Map<String, Object> getRequestParams(JoinPoint joinPoint) {
         Map<String, Object> map = new LinkedHashMap<> ();
         String[] parameterNames = ((MethodSignature) joinPoint.getSignature ()).getParameterNames ();
@@ -29,6 +37,21 @@ public class AopUtils {
             }
         }
         return map;
+    }
+
+    /**
+     * 获取注解描述信息
+     * @param joinPoint
+     * @return
+     */
+    public static String getDescriptionFromAnnotations(JoinPoint joinPoint) {
+        String description = "";
+        Method method = ((MethodSignature) joinPoint.getSignature ()).getMethod ();
+        ApiOperation annotation = method.getAnnotation (ApiOperation.class);
+        if (annotation != null) {
+            description = annotation.value ();
+        }
+        return description;
     }
 
 

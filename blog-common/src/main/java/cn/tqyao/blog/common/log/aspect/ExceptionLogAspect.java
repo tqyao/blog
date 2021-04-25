@@ -1,10 +1,12 @@
 package cn.tqyao.blog.common.log.aspect;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.tqyao.blog.common.log.domain.ExceptionLog;
 import cn.tqyao.blog.common.log.service.ExceptionLogService;
 import cn.tqyao.blog.common.util.AopUtils;
+import cn.tqyao.blog.common.util.IpAddressUtils;
 import cn.tqyao.blog.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -61,18 +63,20 @@ public class ExceptionLogAspect {
     private ExceptionLog handleLog(JoinPoint joinPoint, Exception e) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes ();
         HttpServletRequest request = attributes.getRequest ();
-        String uri = request.getRequestURI ();
-        String method = request.getMethod ();
-        request.getHeader ("User-Agent");
-
-        // 获取注解描述信息
-        String stackTrace = getStackTrace (e);
+        // 获取请求参数
         Map<String, Object> requestParams = AopUtils.getRequestParams (joinPoint);
-        String param = StringUtils.substring (JSONUtil.parseFromMap (requestParams).toString (), 0, 2000);
-        ExceptionLog log = new ExceptionLog ();
-
-
-        return log;
+        String param = StrUtil.sub (JSONUtil.parseFromMap (requestParams).toString (), 0, 2000);
+        // 构造 ExceptionLog
+        ExceptionLog excLog = new ExceptionLog ();
+        excLog
+                .setUri (request.getRequestURI ())
+                .setMethod (request.getMethod ())
+                .setUserAgent (request.getHeader ("User-Agent"))
+                .setError (getStackTrace (e))
+                .setParam (param)
+                .setDescription (AopUtils.getDescriptionFromAnnotations (joinPoint))
+                .setIp (IpAddressUtils.getIpAddress (request));
+        return excLog;
     }
 
     /**

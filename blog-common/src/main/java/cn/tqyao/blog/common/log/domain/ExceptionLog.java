@@ -3,6 +3,7 @@ package cn.tqyao.blog.common.log.domain;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -20,6 +21,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
  * @since 2021-04-13
  */
 @Data
+@Accessors(chain = true)
 @ApiModel(value="LogException对象", description="后台管理-异常日志")
 @Document(collation = "exceptionL_log")
 public class ExceptionLog {
