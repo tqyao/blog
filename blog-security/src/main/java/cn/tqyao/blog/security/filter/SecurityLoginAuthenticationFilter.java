@@ -39,7 +39,7 @@ public class SecurityLoginAuthenticationFilter extends UsernamePasswordAuthentic
                     "Authentication method not supported: " + request.getMethod());
         }
         //判断 ContentType 类型
-        if (request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
+        if (request.getContentType().contains (MediaType.APPLICATION_JSON_VALUE)) {
             // 获取请求内容
             Map<String, String> loginData = new HashMap<>(2);
             try {

@@ -85,7 +85,7 @@ secure:
       - /articles/list
       - /articles/detail/*
       - /api/files/**
-      - /members/member/refresh-token/**
+      - /members/refresh-token/**
       - /members/member/register
 
 
