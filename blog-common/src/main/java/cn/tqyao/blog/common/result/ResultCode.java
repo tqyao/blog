@@ -9,7 +9,7 @@ public enum ResultCode implements IResultCode {
     FAILED(0, "操作失败"),
 
     BAD_REQUEST(400,"错误请求"),
-    UNAUTHORIZED(401, "授权过期，请尝试刷新"),
+    UNAUTHORIZED(401, "未认证，权限不足"),
 
     FORBIDDEN(403, "没有相关权限"),
     NOT_FOUND(404,"没有找到路径资源"),
@@ -24,10 +24,12 @@ public enum ResultCode implements IResultCode {
     USER_BAD_CREDENTIALS_ERROR(3005,"用户名或者密码输入错误"),
 
     TOKEN_PARSE_ERROR(4000,"token解析错误,请确保使用正确的token格式"),
-    TOKEN_TYPE_ERROR(4001,"token类型错误,请更换合适类型"),
+    TOKEN_TYPE_ERROR(4001,"token类型错误,请重新登录"),
     TOKEN_AUTHORIZED_FAIL_ERROR(4002,"token认证失败,请重新登录"),
     TOKEN_INVALIDATION_ERROR(4003,"无效token，请重新登录"),
-    TOKEN_HEAD_ERROR(4004,"token空载体认证令牌");
+    TOKEN_HEAD_ERROR(4004,"token空载体认证令牌，请添加验证类型"),
+    TOKEN_ACCESS_EXPIRE(4005,"授权过期，尝试刷新");
+
 
 
     private long code;

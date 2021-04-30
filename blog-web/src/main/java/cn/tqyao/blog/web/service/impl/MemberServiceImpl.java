@@ -6,6 +6,7 @@ import cn.tqyao.blog.common.result.ResultCode;
 import cn.tqyao.blog.common.util.sms.AliyunSmsSendProperties;
 import cn.tqyao.blog.entity.Member;
 import cn.tqyao.blog.security.domain.JwtAuthenticationToken;
+import cn.tqyao.blog.security.exception.TokenAuthenticationException;
 import cn.tqyao.blog.security.util.RedisSecurityUtil;
 import cn.tqyao.blog.security.util.SecurityUtil;
 import cn.tqyao.blog.web.config.MemberDetails;
@@ -128,12 +129,17 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
     @Override
     public JwtAuthenticationToken refreshToken(String accessToken, String refreshToken) {
-        //先认证刷新
-        accessToken = getTokenBody(accessToken);
-        refreshToken = getTokenBody(refreshToken);
-        JwtAuthenticationToken token = securityUtil.getRefreshToken(refreshToken);
-        //旧token加入黑名单
-        redisSecurityUtil.addBlacklistSet(accessToken, refreshToken);
+        JwtAuthenticationToken token = null;
+        try {
+            //先认证刷新
+            accessToken = getTokenBody(accessToken);
+            refreshToken = getTokenBody(refreshToken);
+            token = securityUtil.getRefreshToken(refreshToken);
+            //旧token加入黑名单
+            redisSecurityUtil.addBlacklistSet(accessToken, refreshToken);
+        } catch (TokenAuthenticationException e) {
+            throw new CommonException (e.getResultCode ());
+        }
         return token;
     }
 

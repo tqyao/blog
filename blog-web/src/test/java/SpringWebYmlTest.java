@@ -9,7 +9,7 @@ import cn.tqyao.blog.common.util.PageUtil;
 import cn.tqyao.blog.entity.Article;
 import cn.tqyao.blog.entity.Member;
 import cn.tqyao.blog.security.domain.JwtTokenTypeEnum;
-import cn.tqyao.blog.security.util.JwtTokenUtil;
+import cn.tqyao.blog.security.util.JWTTokenUtil;
 import cn.tqyao.blog.web.BlogWebApplication;
 import cn.tqyao.blog.web.dto.ArticleBaseDetailConditionDTO;
 import cn.tqyao.blog.web.mapper.ArticleMapper;
@@ -123,7 +123,7 @@ public class SpringWebYmlTest {
     }
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private JWTTokenUtil jwtTokenUtil;
     @Test
     public void testCreateToken(){
         System.out.println(jwtTokenUtil.generateToken("tqyao",new Date(),JwtTokenTypeEnum.ACCESS_TOKEN));

@@ -32,7 +32,7 @@ import static cn.tqyao.blog.security.domain.JwtTokenTypeEnum.REFRESH_TOKEN;
  */
 @Slf4j
 @Getter
-public class JwtTokenUtil {
+public class JWTTokenUtil {
 
     private static final String CLAIM_KEY_TYPE = "type";
 

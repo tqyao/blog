@@ -36,74 +36,139 @@ public class SecurityUtil {
     @Autowired
     private RedisSecurityUtil redisSecurityUtil;
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private JWTTokenUtil JWTTokenUtil;
     @Autowired
     private UserDetailsService userDetailsService;
 
 
     /**
      * 登录成功返回token
+     *
      * @param authentication
      * @return
      */
-    public JwtAuthenticationToken getLoginSuccessToken(Authentication authentication){
-        String username = getUsername(authentication);
-        Date date = new Date();
-        return new JwtAuthenticationToken(null,null,jwtTokenUtil.generateToken(username, date, ACCESS_TOKEN),
-                jwtTokenUtil.generateToken(username, date, REFRESH_TOKEN));
+    public JwtAuthenticationToken getLoginSuccessToken(Authentication authentication) {
+        String username = getUsername (authentication);
+        if (null == username) {
+            throw new TokenAuthenticationException (ResultCode.TOKEN_AUTHORIZED_FAIL_ERROR);
+        }
+        Date date = new Date ();
+        return new JwtAuthenticationToken (null, null,
+                JWTTokenUtil.generateToken (username, date, ACCESS_TOKEN),
+                JWTTokenUtil.generateToken (username, date, REFRESH_TOKEN));
     }
 
     /**
      * 刷新token
+     *
      * @param refreshToken
      * @return
      */
-    public JwtAuthenticationToken getRefreshToken(String refreshToken){
-        return getLoginSuccessToken(checkRefreshTokenValid(refreshToken));
+    public JwtAuthenticationToken getRefreshToken(String refreshToken) {
+        Authentication authentication = checkRefreshTokenValid (refreshToken);
+        return getLoginSuccessToken (authentication);
     }
 
     /**
      * 验证 access_token 并返回 Authentication
+     *
      * @param request
      * @return
      */
-    public Authentication checkAccessTokenValid(HttpServletRequest request){
+    public Authentication checkAccessTokenValid(HttpServletRequest request) {
         //获取请求头token
         String token;
         try {
-            token = jwtTokenUtil.getToken(request);
+            token = JWTTokenUtil.getToken (request);
         } catch (BadCredentialsException e) {
             //异常转换
-            throw new TokenAuthenticationException(ResultCode.TOKEN_HEAD_ERROR);
+            throw new TokenAuthenticationException (ResultCode.TOKEN_HEAD_ERROR);
         }
-        if (StringUtils.isBlank(token)) {
+        if (StringUtils.isBlank (token)) {
             return null;
         }
 
         Authentication authentication;
-        if ((authentication = SecurityContextHolder.getContext().getAuthentication()) != null) {
+        if ((authentication = SecurityContextHolder.getContext ().getAuthentication ()) != null) {
             return authentication;
         }
 
-        return checkTokenValid(token, ACCESS_TOKEN);
+        return checkTokenValid (token, ACCESS_TOKEN);
     }
 
     /**
      * 验证 refresh_token 并返回 Authentication
+     *
      * @param refreshToken
      * @return
      */
-    public Authentication checkRefreshTokenValid(String refreshToken){
+    public Authentication checkRefreshTokenValid(String refreshToken) {
 
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            SecurityContextHolder.clearContext();
+        if (SecurityContextHolder.getContext ().getAuthentication () != null) {
+            SecurityContextHolder.clearContext ();
         }
 
-        return checkTokenValid(refreshToken, REFRESH_TOKEN);
+        return checkTokenValid (refreshToken, REFRESH_TOKEN);
     }
+
+//    /**
+//     * 检查token是否有效
+//     *
+//     * @param token
+//     * @return
+//     */
+//    private Authentication checkTokenValid(String token, JwtTokenTypeEnum jwtTokenType) {
+//        UserDetails userDetails;
+//        try {
+//            //解析 token 获取负载信息，全过程只需解析一次
+//            Claims claims = jwtTokenUtil.getClaimsFromToken (token);
+//
+//            String username = claims.getSubject ();
+//
+//            if (ACCESS_TOKEN.equals (jwtTokenType)) {
+//                log.info ("checking username:{}", username);
+//            }
+//
+//            if (null == username) {
+//                log.warn ("username is null");
+//                return null;
+//            }
+//            String tokenType = jwtTokenUtil.getTokenTypeFromClaims (claims);
+//            if (null == tokenType) {
+//                log.warn ("tokenType is null");
+//                return null;
+//            }
+//
+//            //检查token类型
+//            if (!jwtTokenType.getTokenType ().equals (tokenType)) {
+//                throw new TokenAuthenticationException (ResultCode.TOKEN_TYPE_ERROR);
+//            }
+//
+//            userDetails = userDetailsService.loadUserByUsername (username);
+//            if (!jwtTokenUtil.validateToken (claims, userDetails)) {
+//                throw new TokenAuthenticationException (username, ResultCode.TOKEN_AUTHORIZED_FAIL_ERROR);
+//            }
+//
+//            // 查询redis中是否存在该token
+//            if (redisSecurityUtil.checkInBlacklistSet (token)) {
+//                throw new TokenAuthenticationException (username, ResultCode.TOKEN_INVALIDATION_ERROR);
+//            }
+//
+//            if (ACCESS_TOKEN.equals (jwtTokenType)) {
+//                log.info ("authenticated username:{}", username);
+//            }
+//
+//        } catch (JwtException e) {
+//            //异常转换
+//            log.info ("JWT格式验证失败:{}", token);
+//            return null;
+//        }
+//        return new JwtAuthenticationToken (userDetails, null, userDetails.getAuthorities ());
+//    }
 
     /**
      * 检查token是否有效
+     *
      * @param token
      * @return
      */
@@ -111,49 +176,44 @@ public class SecurityUtil {
         UserDetails userDetails;
         try {
             //解析 token 获取负载信息，全过程只需解析一次
-            Claims claims = jwtTokenUtil.getClaimsFromToken(token);
-
-            String username = claims.getSubject();
-
-            if (ACCESS_TOKEN.equals(jwtTokenType)) {
-                log.info("checking username:{}", username);
-            }
-
-            if (null == username) {
-                log.warn("username is null");
-                return null;
-            }
-            String tokenType = jwtTokenUtil.getTokenTypeFromClaims(claims);
-            if (null == tokenType) {
-                log.warn("tokenType is null");
+            Claims claims = JWTTokenUtil.getClaimsFromToken (token);
+            String username = claims.getSubject ();
+            String tokenType = JWTTokenUtil.getTokenTypeFromClaims (claims);
+            if (null == username || null == tokenType) {
                 return null;
             }
 
-            //检查token类型
-            if (!jwtTokenType.getTokenType().equals(tokenType)) {
-                throw new TokenAuthenticationException(ResultCode.TOKEN_TYPE_ERROR);
+            // 检查token类型
+            if (!jwtTokenType.getTokenType ().equals (tokenType)) {
+                throw new TokenAuthenticationException (ResultCode.TOKEN_TYPE_ERROR);
             }
 
-            userDetails = userDetailsService.loadUserByUsername(username);
-            if (!jwtTokenUtil.validateToken(claims, userDetails)) {
-                throw new TokenAuthenticationException(username,ResultCode.TOKEN_AUTHORIZED_FAIL_ERROR);
+            // 验证是否存在于数据库中
+            userDetails = userDetailsService.loadUserByUsername (username);
+            if (!JWTTokenUtil.validateToken (claims, userDetails)) {
+                throw new TokenAuthenticationException (username, ResultCode.TOKEN_AUTHORIZED_FAIL_ERROR);
             }
 
             // 查询redis中是否存在该token
-            if (redisSecurityUtil.checkInBlacklistSet(token)) {
-                throw new TokenAuthenticationException(username, ResultCode.TOKEN_INVALIDATION_ERROR);
-            }
-
-            if (ACCESS_TOKEN.equals(jwtTokenType)) {
-                log.info("authenticated username:{}", username);
+            if (redisSecurityUtil.checkInBlacklistSet (token)) {
+                throw new TokenAuthenticationException (username, ResultCode.TOKEN_INVALIDATION_ERROR);
             }
 
         } catch (JwtException e) {
-            //异常转换
-            log.info("JWT格式验证失败:{}", token);
+            if (ACCESS_TOKEN.equals (jwtTokenType)) {
+                // accessToken 过期，提示刷新
+                throw new TokenAuthenticationException (ResultCode.TOKEN_ACCESS_EXPIRE);
+            }
+            if (REFRESH_TOKEN.equals (jwtTokenType)) {
+                // refreshToken 过期，提示重新登录即可
+                throw new TokenAuthenticationException (ResultCode.TOKEN_INVALIDATION_ERROR);
+            }
+            return null;
+        } catch (TokenAuthenticationException e) {
+            log.warn ("token 错误：", e);
             return null;
         }
-        return new JwtAuthenticationToken(userDetails, null ,userDetails.getAuthorities());
+        return new JwtAuthenticationToken (userDetails, null, userDetails.getAuthorities ());
     }
 
 //
@@ -221,18 +281,18 @@ public class SecurityUtil {
 //    }
 
 
-
     /**
      * 获取用户名根据认证信息
+     *
      * @param authentication
      * @return
      */
-    public String getUsername(Authentication authentication){
+    public String getUsername(Authentication authentication) {
         String username = null;
         if (null != authentication) {
-            Object principal = authentication.getPrincipal();
+            Object principal = authentication.getPrincipal ();
             if (principal instanceof UserDetails) {
-                username = ((UserDetails) principal).getUsername();
+                username = ((UserDetails) principal).getUsername ();
             }
             if (principal instanceof String) {
                 username = (String) principal;
@@ -240,7 +300,6 @@ public class SecurityUtil {
         }
         return username;
     }
-
 
 
 }

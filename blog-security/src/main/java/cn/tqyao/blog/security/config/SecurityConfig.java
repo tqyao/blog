@@ -7,10 +7,9 @@ import cn.tqyao.blog.security.handle.JsonAuthenticationEntryPoint;
 import cn.tqyao.blog.security.handle.JsonAuthenticationFailureHandler;
 import cn.tqyao.blog.security.handle.JsonLoginSuccessHandler;
 
-import cn.tqyao.blog.security.util.JwtTokenUtil;
+import cn.tqyao.blog.security.util.JWTTokenUtil;
 import cn.tqyao.blog.security.util.RedisSecurityUtil;
 import cn.tqyao.blog.security.util.SecurityUtil;
-import com.baomidou.mybatisplus.extension.api.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -122,8 +121,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new RedisSecurityUtil();
     }
     @Bean
-    public JwtTokenUtil jwtTokenUtil(){
-        return new JwtTokenUtil();
+    public JWTTokenUtil jwtTokenUtil(){
+        return new JWTTokenUtil ();
     }
     @Bean
     public SecurityUtil securityUtil(){
